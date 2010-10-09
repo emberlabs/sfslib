@@ -9,7 +9,7 @@ Please note that the library is not intended to be used as a firewall, and that 
 
 ## Requirements
 
-* PHP 5.2.4
+* PHP 5.2.3
 * Installation of the OpenFlame Framework, available at http://github.com/OpenFlame/OpenFlame-Framework
 
 ### Notes
