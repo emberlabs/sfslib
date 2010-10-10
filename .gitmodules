@@ -1,0 +1,3 @@
+[submodule "vendor/OpenFlame"]
+	path = vendor/OpenFlame
+	url = http://github.com/OpenFlame/OpenFlame-Framework.git
