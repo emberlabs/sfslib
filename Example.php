@@ -23,3 +23,17 @@ require SFSLIB . 'SFSException.php';
 
 // Register our own autoloader
 spl_autoload_register('SFS::loader');
+
+$sfs = new SFS();
+// Example of how to set a bunch of options on the SFS library before you request...
+$sfs->setCacheTTL(43200)->setStreamTimeout(5);
+
+try
+{
+	// @note $result is an object of type SFSResult, and can have its properties accessed as an array, or through its built-in methods.
+	$result = $sfs->requestCheck('Some username here', 'someemail@email.tld', '127.0.0.2');
+}
+catch(SFSException $e)
+{
+	// error handling goes here, handle errors however you'd want.
+}
