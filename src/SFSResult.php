@@ -66,9 +66,9 @@ class SFSResult implements ArrayAccess
 
 	protected $ip_lastseen;
 
-	const SFS_DATETIME_FORMAT = '';
+	const SFS_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
-	const SFS_TIMEZONE = '';
+	const SFS_TIMEZONE = 'Etc/GMT-5';
 
 	/**
 	 * Constructor
@@ -202,6 +202,8 @@ class SFSResult implements ArrayAccess
 	 * Get an "array" offset for this object.
 	 * @param mixed $offset - The offset to grab from.
 	 * @return mixed - The value of the offset, or null if the offset does not exist.
+	 *
+	 * @throws SFSResultException
 	 */
 	public function offsetGet($offset)
 	{
@@ -219,6 +221,8 @@ class SFSResult implements ArrayAccess
 	 * @param mixed $offset - The offset to set.
 	 * @param mixed $value - The value to set to the offset.
 	 * @return void
+	 *
+	 * @throws SFSResultException
 	 */
 	public function offsetSet($offset, $value)
 	{
@@ -229,6 +233,8 @@ class SFSResult implements ArrayAccess
 	 * Unset an "array" offset.
 	 * @param mixed $offset - The offset to clear out.
 	 * @return void
+	 *
+	 * @throws SFSResultException
 	 */
 	public function offsetUnset($offset)
 	{
