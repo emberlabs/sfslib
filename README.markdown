@@ -21,7 +21,7 @@ Via Linux, or git bash in msysgit for Windows
 	git submodule init
 	git submodule update
 
-This will download the StopForumSpam integration Library, along with its dependency, the OpenFlame Framework.
+This will download the StopForumSpam integration Library along with its dependency, the OpenFlame Framework.
 
 ### Notes
 
