@@ -141,14 +141,26 @@ class SFSRequest
 		if(empty($this->username) && empty($this->email) && empty($this->ip))
 			throw new SFSRequestException('No request data provided for SFS API request', SFSRequestException::ERR_NO_REQUEST_DATA);
 
-		// Setup the stream timeout, just in case
-		$ctx = stream_context_create(array(
-			'http'	=> array(
-				'timeout'	=> $this->sfs->getStreamTimeout(),
-			),
-		));
+		if(function_exists('curl_init'))
+		{
+			// @todo writeme
+		}
+		elseif(@ini_get('allow_url_fopen'))
+		{
+			// Setup the stream timeout, just in case
+			$ctx = stream_context_create(array(
+				'http'	=> array(
+					'timeout'	=> $this->sfs->getRequestTimeout(),
+				),
+			));
 
-		$json = @file_get_contents($this->buildURL(), false, $ctx);
+			$json = @file_get_contents($this->buildURL() . sprintf('&useragent=%1$s', urlencode('SFSIntegration_PHP-' . SFS::VERSION)), false, $ctx);
+		}
+		else
+		{
+			throw new SFSRequestException('No reliable method is available to send the request to the StopForumSpam API', SFSRequestException::ERR_NO_REQUEST_METHOD_AVAILABLE);
+		}
+
 
 		if(!$json)
 			throw new SFSRequestException('No data recieved from SFS API', SFSRequestException::ERR_API_RETURN_EMPTY);
