@@ -122,9 +122,9 @@ class SFSRequest
 	protected function buildURL()
 	{
 		$url = self::SFS_API_URL . '?';
-		$url .= ($this->username) ? 'username=' . $this->prepareAPIData($this->username) : '';
-		$url .= ($this->email) ? 'email=' . $this->prepareAPIData($this->email) : '';
-		$url .= ($this->ip) ? 'ip=' . $this->prepareAPIData($this->ip) : '';
+		$url .= ($this->username) ? 'username=' . $this->prepareAPIData($this->username) . '&' : '';
+		$url .= ($this->email) ? 'email=' . $this->prepareAPIData($this->email) . '&' : '';
+		$url .= ($this->ip) ? 'ip=' . $this->prepareAPIData($this->ip) . '&' : '';
 		$url .= 'f=' . self::SFS_API_METHOD;
 
 		return $url;
@@ -160,11 +160,11 @@ class SFSRequest
 		}
 		catch(OfJSONException $e)
 		{
-			throw new SFSRequestException('Invalid JSON recieved from SFS API', SFSRequestException::ERR_API_RETURNED_BAD_JSON);
+			throw new SFSRequestException(sprintf('Invalid JSON recieved from SFS API - %1$s', $e->getMessage()), SFSRequestException::ERR_API_RETURNED_BAD_JSON);
 		}
 
 		// Did the StopForumSpam API return an error?
-		if($data['error'])
+		if(isset($data['error']))
 			throw new SFSRequestException(sprintf('StopForumSpam API error: %1$s', $data['error']), SFSRequestException::ERR_API_RETURNED_ERROR);
 
 		return new SFSResult($this->sfs, $data);
