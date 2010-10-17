@@ -1,8 +1,8 @@
 <?php
 
-define('SFSLIB', dirname(__FILE__) . 'src/');
+define('SFSLIB', dirname(__FILE__) . '/src/');
 
-define('OF_ROOT', dirname(__FILE__) . 'vendor/OpenFlame/src/');
+define('OF_ROOT', dirname(__FILE__) . '/vendor/OpenFlame/src/');
 require OF_ROOT . 'Of.php';
 require OF_ROOT . 'OfException.php';
 
@@ -11,11 +11,14 @@ spl_autoload_register('Of::loader');
 
 try
 {
-	Of::storeObject('cache', new OfCache('JSON', dirname(__FILE__) . 'data/cache'));
+	$cache = new OfCache('JSON', dirname(__FILE__) . '/data/cache');
+	Of::storeObject('cache', $cache);
 }
 catch(OfException $e)
 {
 	// it's recommended that you do something here regarding error handling if we failed to start up the cache
+	echo $e->getMessage() . PHP_EOL;
+	exit;
 }
 
 require SFSLIB . 'SFS.php';
@@ -36,4 +39,6 @@ try
 catch(SFSException $e)
 {
 	// error handling goes here, handle errors however you'd want.
+	echo $e->getMessage() . PHP_EOL;
+	exit;
 }
