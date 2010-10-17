@@ -38,7 +38,7 @@ class SFS
 	/**
 	 * @var integer - The timeout (in seconds) to use when submitting a request to StopForumSpam.
 	 */
-	protected $stream_timeout = 2;
+	protected $request_timeout = 2;
 
 	/**
 	 * @var integer - The time to store SFS data for, in seconds.  Default is 21600 seconds (or 6 hours).
@@ -106,9 +106,9 @@ class SFS
 	 * Get the stream timeout setting.
 	 * @return integer - The current stream timeout, in seconds.
 	 */
-	public function getStreamTimeout()
+	public function getRequestTimeout()
 	{
-		return (int) $this->stream_timeout;
+		return (int) $this->request_timeout;
 	}
 
 	/**
@@ -116,9 +116,9 @@ class SFS
 	 * @param integer $timeout - The stream timeout to set, in seconds.
 	 * @return SFS - Provides a fluent interface.
 	 */
-	public function setStreamTimeout($timeout)
+	public function setRequestTimeout($timeout)
 	{
-		$this->stream_timeout = (int) $timeout;
+		$this->request_timeout = (int) $timeout;
 		return $this;
 	}
 

@@ -29,7 +29,7 @@ spl_autoload_register('SFS::loader');
 
 $sfs = new SFS();
 // Example of how to set a bunch of options on the SFS library before you request...
-$sfs->setCacheTTL(43200)->setStreamTimeout(5);
+$sfs->setCacheTTL(43200)->setRequestTimeout(5);
 
 try
 {
