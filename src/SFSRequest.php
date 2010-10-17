@@ -1,5 +1,33 @@
 <?php
+/**
+ *
+ *===================================================================
+ *
+ *  StopForumSpam integration library
+ *-------------------------------------------------------------------
+ * @package     sfsintegration
+ * @author      Damian Bushong
+ * @copyright   (c) 2010 Damian Bushong
+ * @license     MIT License
+ * @link        http://github.com/Obsidian1510/SFSIntegration
+ *
+ *===================================================================
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.
+ *
+ */
 
+/**
+ * SFS Integration - SFS Request Object,
+ *      Requests a user check against the StopForumSpam database using the JSON API.
+ *
+ *
+ * @package     sfsintegration
+ * @author      Damian Bushong
+ * @license     MIT License
+ * @link        http://github.com/Obsidian1510/SFSIntegration
+ */
 class SFSRequest
 {
 	/**
@@ -26,6 +54,21 @@ class SFSRequest
 	 * @var string - The IP to look up
 	 */
 	protected $ip = '';
+
+	/**
+	 * @var SFS - The primary StopForumSpam object
+	 */
+	protected $sfs;
+
+	/**
+	 * Constructor
+	 * @param SFS $sfs - The primary SFS object.
+	 * @return void
+	 */
+	public function __construct(SFS $sfs)
+	{
+		$this->sfs = $sfs;
+	}
 
 	/**
 	 * Sets the username that we are checking.
@@ -91,14 +134,24 @@ class SFSRequest
 	 * Sends the StopForumSpam API _GET request, based on the chunks of information we are looking for.
 	 * @return SFSResult - The results of the lookup.
 	 *
-	 * @throws SFSException
+	 * @throws SFSRequestException
 	 */
 	public function send()
 	{
 		if(empty($this->username) && empty($this->email) && empty($this->ip))
-			throw new SFSException(); // @todo exception
+			throw new SFSRequestException('No request data provided for SFS API request', SFSRequestException::ERR_NO_REQUEST_DATA);
 
-		$json = file_get_contents($this->buildURL());
+		// Setup the stream timeout, just in case
+		$ctx = stream_context_create(array(
+			'http'	=> array(
+				'timeout'	=> $this->sfs->getStreamTimeout(),
+			),
+		));
+
+		$json = file_get_contents($this->buildURL(), false, $ctx);
+
+		if(!$json)
+			throw new SFSRequestException('No data recieved from SFS API', SFSRequestException::ERR_API_RETURN_EMPTY);
 
 		// Be prepared in case we get invalid JSON...
 		try
@@ -107,12 +160,13 @@ class SFSRequest
 		}
 		catch(OfJSONException $e)
 		{
-			throw new SFSException(); // @todo exception
+			throw new SFSRequestException('Invalid JSON recieved from SFS API', SFSRequestException::ERR_API_RETURNED_BAD_JSON);
 		}
 
+		// Did the StopForumSpam API return an error?
 		if($data['error'])
-			throw new SFSException(); // @todo exception
+			throw new SFSRequestException(sprintf('StopForumSpam API error: %1$s', $data['error']), SFSRequestException::ERR_API_RETURNED_ERROR);
 
-		return new SFSResult($data);
+		return new SFSResult($this->sfs, $data);
 	}
 }
