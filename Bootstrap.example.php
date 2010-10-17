@@ -15,7 +15,7 @@ try
 }
 catch(OfException $e)
 {
-	// do something here if we failed to start up the cache
+	// it's recommended that you do something here regarding error handling if we failed to start up the cache
 }
 
 require SFSLIB . 'SFS.php';
