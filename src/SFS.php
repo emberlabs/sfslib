@@ -62,7 +62,8 @@ class SFS
 
 		if(!is_null($cache_data))
 		{
-			return new SFSResult($this, $cache_data);
+			$requested_data = array('username' => $username, 'email' => $email, 'ip' => $ip);
+			return new SFSResult($this, $cache_data, $requested_data);
 		}
 		else
 		{

@@ -167,6 +167,8 @@ class SFSRequest
 		if(isset($data['error']))
 			throw new SFSRequestException(sprintf('StopForumSpam API error: %1$s', $data['error']), SFSRequestException::ERR_API_RETURNED_ERROR);
 
-		return new SFSResult($this->sfs, $data);
+		$requested_data = array('username' => $this->username, 'email' => $this->email, 'ip' => $this->ip);
+
+		return new SFSResult($this->sfs, $data, $requested_data);
 	}
 }
