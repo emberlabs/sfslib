@@ -28,7 +28,7 @@
  * @license     MIT License
  * @link        http://github.com/Obsidian1510/SFSIntegration
  */
-class SFSResult /*implements ArrayAccess*/
+class SFSResult implements ArrayAccess
 {
 	protected $sfs;
 
