@@ -31,6 +31,11 @@
 class SFS
 {
 	/**
+	 * @const string - The version stamp for the library.
+	 */
+	const VERSION = '0.1.0-DEV';
+
+	/**
 	 * @var integer - The timeout (in seconds) to use when submitting a request to StopForumSpam.
 	 */
 	protected $stream_timeout = 2;
