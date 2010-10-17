@@ -148,7 +148,7 @@ class SFSRequest
 			),
 		));
 
-		$json = file_get_contents($this->buildURL(), false, $ctx);
+		$json = @file_get_contents($this->buildURL(), false, $ctx);
 
 		if(!$json)
 			throw new SFSRequestException('No data recieved from SFS API', SFSRequestException::ERR_API_RETURN_EMPTY);
