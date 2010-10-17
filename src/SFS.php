@@ -84,7 +84,7 @@ class SFS
 	 *
 	 * @note - We use the class Exception here instead of SFSException to make the class "SFS" standalone
 	 */
-	public function loader($class)
+	public static function loader($class)
 	{
 		if(file_exists(SFSLIB . basename($class) . '.php'))
 		{
