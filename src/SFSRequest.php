@@ -62,7 +62,7 @@ class SFSRequest
 
 	/**
 	 * Constructor
-	 * @param SFS $sfs - The primary SFS object.
+	 * @param SFS $sfs - The primary SFS interaction object.
 	 * @return void
 	 */
 	public function __construct(SFS $sfs)
