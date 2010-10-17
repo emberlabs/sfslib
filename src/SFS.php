@@ -31,12 +31,23 @@
 class SFS
 {
 	/**
+	 * @var integer - The timeout (in seconds) to use when submitting a request to StopForumSpam.
+	 */
+	protected $stream_timeout = 2;
+
+	/**
 	 * @var integer - The time to store SFS data for, in seconds.  Default is 21600 seconds (or 6 hours).
 	 */
 	protected $cache_ttl = 21600;
 
 	/**
+	 * Request a database check from the StopForumSpam service
+	 * @param string $username - The username to check
+	 * @param string $email - The email to check
+	 * @param string $ip - The IP to check
+	 * @return SFSResult - The result data from StopForumSpam.
 	 *
+	 * @note use try/catch around this method as methods called from this method will throw an exception on error
 	 */
 	public function requestCheck($username = '', $email = '', $ip = '')
 	{
@@ -46,15 +57,16 @@ class SFS
 		if(!$username && !$email && !$ip)
 			return false;
 
+		// Check to see if we have the result data cached already...
 		$cache_data = $cache->loadData(hash('md5', "$username/$email/$ip"));
 
 		if(!is_null($cache_data))
 		{
-			return new SFSResult($cache_data);
+			return new SFSResult($this, $cache_data);
 		}
 		else
 		{
-			$request = new SFSRequest();
+			$request = new SFSRequest($this);
 			$result = $request->setUsername($username)->setEmail($email)->setIP($ip)->send();
 
 			$cache->storeData(hash('md5', "$username/$email/$ip"), $result->toArray(), $this->cache_ttl);
@@ -63,8 +75,64 @@ class SFS
 		}
 	}
 
-	public function loader()
+	/**
+	 * Autoloader method
+	 * @param string $class - The class to load up
+	 * @return boolean - True if load successful, false if we could not find the file to load
+	 *
+	 * @throws Exception
+	 *
+	 * @note - We use the class Exception here instead of SFSException to make the class "SFS" standalone
+	 */
+	public function loader($class)
 	{
-		// asdf
+		if(file_exists(SFSLIB . basename($class) . '.php'))
+		{
+			require SFSLIB . basename($class) . '.php';
+			if(!class_exists($class, false))
+				throw new Exception('SFS Integration Library Autoloader failed to load correct class file for class "' . $class . '"');
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get the stream timeout setting.
+	 * @return integer - The current stream timeout, in seconds.
+	 */
+	public function getStreamTimeout()
+	{
+		return (int) $this->stream_timeout;
+	}
+
+	/**
+	 * Set the current stream timeout.
+	 * @param integer $timeout - The stream timeout to set, in seconds.
+	 * @return SFS - Provides a fluent interface.
+	 */
+	public function setStreamTimeout($timeout)
+	{
+		$this->stream_timeout = (int) $timeout;
+		return $this;
+	}
+
+	/**
+	 * Get the cache TTL for requesting data
+	 * @return integer - The cache TTL for request data, in seconds.
+	 */
+	public function getCacheTTL()
+	{
+		return (int) $this->cache_ttl;
+	}
+
+	/**
+	 * Set the cache TTL for requesting data
+	 * @param integer $ttl - The cache TTL to set, in seconds
+	 * @return SFS - Provides a fluent interface.
+	 */
+	public function setCacheTTL($ttl)
+	{
+		$this->cache_ttl = (int) $ttl;
+		return $this;
 	}
 }
