@@ -31,7 +31,7 @@
 class SFSRequest
 {
 	/**
-	 * @var string - Constant defining what API retrieval method we are using here
+	 * @var string - Constant defining what API retrieval method we are using here.
 	 */
 	const SFS_API_METHOD = 'json';
 
@@ -41,22 +41,22 @@ class SFSRequest
 	const SFS_API_URL = 'http://www.stopforumspam.com/api';
 
 	/**
-	 * @var string - The username to look up
+	 * @var string - The username to look up.
 	 */
 	protected $username = '';
 
 	/**
-	 * @var string - The email to look up
+	 * @var string - The email to look up.
 	 */
 	protected $email = '';
 
 	/**
-	 * @var string - The IP to look up
+	 * @var string - The IP to look up.
 	 */
 	protected $ip = '';
 
 	/**
-	 * @var SFS - The primary StopForumSpam object
+	 * @var SFS - The primary StopForumSpam object.
 	 */
 	protected $sfs;
 
