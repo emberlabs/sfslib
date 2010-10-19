@@ -143,7 +143,17 @@ class SFSRequest
 
 		if(function_exists('curl_init'))
 		{
-			// @todo writeme
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $this->buildURL());
+			curl_setopt($curl, CURLOPT_VERBOSE, 1);
+			curl_setopt($curl, CURLOPT_POST, 0);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_HEADER, 1);
+			curl_setopt($curl, CURLOPT_USERAGENT, urlencode('SFSIntegration_PHP-' . SFS::VERSION . ' / PHP ' . PHP_VERSION));
+			$json = curl_exec($curl);
+			curl_close($curl);
+
+			unset($curl);
 		}
 		elseif(@ini_get('allow_url_fopen'))
 		{
@@ -154,7 +164,7 @@ class SFSRequest
 				),
 			));
 
-			$json = @file_get_contents($this->buildURL() . sprintf('&useragent=%1$s', urlencode('SFSIntegration_PHP-' . SFS::VERSION)), false, $ctx);
+			$json = @file_get_contents($this->buildURL() . sprintf('&useragent=%1$s', urlencode('SFSIntegration_PHP-' . SFS::VERSION . ' PHP ' . PHP_VERSION)), false, $ctx);
 		}
 		else
 		{
