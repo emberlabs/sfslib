@@ -88,8 +88,8 @@ class SFSRequest
 	 */
 	public function setEmail($email)
 	{
-		// @todo validate email here
-		$this->email = $email;
+		if(filter_var($email, FILTER_VALIDATE_EMAIL) !== false)
+			$this->email = $email;
 		return $this;
 	}
 
@@ -100,8 +100,8 @@ class SFSRequest
 	 */
 	public function setIP($ip)
 	{
-		// @todo validate IP here
-		$this->ip = $ip;
+		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) !== false)
+			$this->ip = $ip;
 		return $this;
 	}
 
@@ -131,6 +131,15 @@ class SFSRequest
 	}
 
 	/**
+	 * Build our UserAgent string, and be sure to include the library version plus the PHP version we are running.
+	 * @return string - The UserAgent string to send.
+	 */
+	protected function buildUserAgent()
+	{
+		return sprintf('PHP-SFSIntegration::%1$s_PHP::%2$s', SFS::VERSION, PHP_VERSION);
+	}
+
+	/**
 	 * Sends the StopForumSpam API _GET request, based on the chunks of information we are looking for.
 	 * @return SFSResult - The results of the lookup.
 	 *
@@ -146,11 +155,30 @@ class SFSRequest
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $this->buildURL());
 			curl_setopt($curl, CURLOPT_VERBOSE, 1);
-			curl_setopt($curl, CURLOPT_POST, 0);
+			//curl_setopt($curl, CURLOPT_POST, true);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_HEADER, 1);
-			curl_setopt($curl, CURLOPT_USERAGENT, urlencode('SFSIntegration_PHP-' . SFS::VERSION . ' / PHP ' . PHP_VERSION));
+			//curl_setopt($curl, CURLOPT_HEADER, false);
+			curl_setopt($curl, CURLOPT_TIMEOUT, $this->sfs->getRequestTimeout());
+			curl_setopt($curl, CURLOPT_USERAGENT, $this->buildUserAgent());
 			$json = curl_exec($curl);
+			if(curl_errno($curl))
+			{
+				if(@ini_get('allow_url_fopen'))
+				{
+					// Setup the stream timeout, just in case
+					$ctx = stream_context_create(array(
+						'http'	=> array(
+							'timeout'	=> $this->sfs->getRequestTimeout(),
+						),
+					));
+
+					$json = @file_get_contents($this->buildURL() . '&useragent=' . urlencode($this->buildUserAgent()), false, $ctx);
+				}
+				else
+				{
+					throw new SFSRequestException('No reliable method is available to send the request to the StopForumSpam API', SFSRequestException::ERR_NO_REQUEST_METHOD_AVAILABLE);
+				}
+			}
 			curl_close($curl);
 
 			unset($curl);
