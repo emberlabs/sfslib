@@ -27,7 +27,9 @@ require SFSLIB . 'SFSException.php';
 // Register our own autoloader
 spl_autoload_register('SFS::loader');
 
+// Instantiate the main StopForumSpam interaction object.
 $sfs = new SFS();
+
 // Example of how to set a bunch of options on the SFS library before you request...
 $sfs->setCacheTTL(43200)->setRequestTimeout(5);
 
