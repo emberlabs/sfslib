@@ -30,44 +30,104 @@
  */
 class SFSResult implements ArrayAccess
 {
+	/**
+	 * @var SFS - The primary StopForumSpam object.
+	 */
 	protected $sfs;
 
+	/**
+	 * @var array - The array of raw data that we received from StopForumSpam.
+	 */
 	protected $raw_data = array();
 
+	/**
+	 * @var boolean - Whether or not the API request was marked as "successful" in the returned data.
+	 */
 	protected $successful = false;
 
+	/**
+	 * @var array - Array of returned username results from StopForumSpam.
+	 */
 	protected $username = array();
 
+	/**
+	 * @var string - The username we sent in our request to StopForumSpam.
+	 */
 	protected $username_data = '';
 
+	/**
+	 * @var boolean - Whether or not the username was found in the StopForumSpam database search.
+	 */
 	protected $username_appears = false;
 
+	/**
+	 * @var integer - How many times the username was found in the StopForumSpam database search.
+	 */
 	protected $username_frequency = 0;
 
+	/**
+	 * @var DateTime - The last time the username was reported to the StopForumSpam service.
+	 */
 	protected $username_lastseen;
 
+	/**
+	 * @var array - Array of returned email results from StopForumSpam.
+	 */
 	protected $email = array();
 
+	/**
+	 * @var string - The email we sent in our request to StopForumSpam.
+	 */
 	protected $email_data = '';
 
+	/**
+	 * @var boolean - Whether or not the email was found in the StopForumSpam database search.
+	 */
 	protected $email_appears = false;
 
+	/**
+	 * @var integer - How many times the email was found in the StopForumSpam database search.
+	 */
 	protected $email_frequency = 0;
 
+	/**
+	 * @var DateTime - The last time the email was reported to the StopForumSpam service.
+	 */
 	protected $email_lastseen;
 
+	/**
+	 * @var array - Array of returned IP results from StopForumSpam.
+	 */
 	protected $ip = array();
 
+	/**
+	 * @var string - The IP we sent in our request to StopForumSpam.
+	 */
 	protected $ip_data = '';
 
+	/**
+	 * @var boolean - Whether or not the IP was found in the StopForumSpam database search.
+	 */
 	protected $ip_appears = false;
 
+	/**
+	 * @var integer - How many times the IP was found in the StopForumSpam database search.
+	 */
 	protected $ip_frequency = 0;
 
+	/**
+	 * @var DateTime - The last time the IP was reported to the StopForumSpam service.
+	 */
 	protected $ip_lastseen;
 
+	/**
+	 * @const string - The date() format for dates returned by the StopForumSpam service.
+	 */
 	const SFS_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
+	/**
+	 * @const string - The PHP DateTimeZone timezone string for the StopForumSpam service.
+	 */
 	const SFS_TIMEZONE = 'Etc/GMT-5';
 
 	/**
