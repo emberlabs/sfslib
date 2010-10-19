@@ -88,8 +88,10 @@ class SFSRequest
 	 */
 	public function setEmail($email)
 	{
-		if(filter_var($email, FILTER_VALIDATE_EMAIL) !== false)
-			$this->email = $email;
+		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
+			throw new SFSRequestException('Invalid email address supplied', SFSRequestException::ERR_INVALID_EMAIL_SUPPLIED);
+
+		$this->email = $email;
 		return $this;
 	}
 
@@ -100,8 +102,10 @@ class SFSRequest
 	 */
 	public function setIP($ip)
 	{
-		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) !== false)
-			$this->ip = $ip;
+		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 & FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) === false)
+			throw new SFSRequestException('Invalid IP address supplied', SFSRequestException::ERR_INVALID_IP_SUPPLIED);
+
+		$this->ip = $ip;
 		return $this;
 	}
 
