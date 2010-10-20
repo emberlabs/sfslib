@@ -178,10 +178,7 @@ class SFSRequest
 		{
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $this->buildURL());
-			curl_setopt($curl, CURLOPT_VERBOSE, 1);
-			//curl_setopt($curl, CURLOPT_POST, true);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			//curl_setopt($curl, CURLOPT_HEADER, false);
 			curl_setopt($curl, CURLOPT_TIMEOUT, $this->sfs->getRequestTimeout());
 			curl_setopt($curl, CURLOPT_USERAGENT, $this->buildUserAgent());
 			$json = curl_exec($curl);
