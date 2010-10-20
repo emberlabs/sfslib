@@ -68,7 +68,7 @@ class SFS
 		{
 			try
 			{
-				Of::storeObject('cache', new OfCache('JSON', dirname(__FILE__) . '/data/cache'));
+				Of::storeObject('cache', new OfCache('JSON', dirname(__FILE__) . '/../data/cache'));
 			}
 			catch(OfException $e)
 			{
