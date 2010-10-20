@@ -33,7 +33,7 @@ class SFS
 	/**
 	 * @const string - The version stamp for the library.
 	 */
-	const VERSION = '0.1.0-DEV';
+	const VERSION = '0.1.0';
 
 	/**
 	 * @var integer - The timeout (in seconds) to use when submitting a request to StopForumSpam.
