@@ -46,6 +46,38 @@ class SFS
 	protected $cache_ttl = 21600;
 
 	/**
+	 * Constructor
+	 * @return void
+	 *
+	 * @throws Exception
+	 */
+	public function __construct()
+	{
+		// If the "Of" class hasn't been loaded, let's load the basics and set the autoloader.
+		if(!class_exists('Of', false))
+		{
+			require OF_ROOT . 'Of.php';
+			require OF_ROOT . 'OfException.php';
+
+			// Register the OpenFlame Framework autoloader
+			spl_autoload_register('Of::loader');
+		}
+
+		// If our cache object isn't present, we want to instantiate it.
+		if(is_null(Of::getObject('cache')))
+		{
+			try
+			{
+				Of::storeObject('cache', new OfCache('JSON', dirname(__FILE__) . '/data/cache'));
+			}
+			catch(OfException $e)
+			{
+				throw new Exception(sprintf('Failed to initialize cache object - "%1$s"', $e->getMessage()));
+			}
+		}
+	}
+
+	/**
 	 * Request a database check from the StopForumSpam service
 	 * @param string $username - The username to check
 	 * @param string $email - The email to check
@@ -59,6 +91,7 @@ class SFS
 		/* @var $cache OfCache */
 		$cache = Of::obj('cache');
 
+		// If no items to check were provided, then why are we running this method?
 		if(!$username && !$email && !$ip)
 			return false;
 
@@ -72,9 +105,15 @@ class SFS
 		}
 		else
 		{
+			// Create a new SFSRequest object, and arm it with the details we are looking for
 			$request = new SFSRequest($this);
-			$result = $request->setUsername($username)->setEmail($email)->setIP($ip)->send();
+			$result = $request
+				->setUsername($username)
+				->setEmail($email)
+				->setIP($ip)
+				->send();
 
+			// Store the data from StopForumSpam in the cache for now.
 			$cache->storeData(hash('md5', "$username/$email/$ip"), $result->toArray(), $this->cache_ttl);
 
 			return $result;
@@ -96,7 +135,7 @@ class SFS
 		{
 			require SFSLIB . basename($class) . '.php';
 			if(!class_exists($class, false))
-				throw new Exception('SFS Integration Library Autoloader failed to load correct class file for class "' . $class . '"');
+				throw new Exception(sprintf('SFS Integration Library Autoloader failed to load correct class file for class "%1$s"', $class));
 			return true;
 		}
 		return false;

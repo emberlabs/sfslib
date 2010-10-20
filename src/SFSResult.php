@@ -154,6 +154,7 @@ class SFSResult implements ArrayAccess
 		// Instantiate the DateTimeZone object for StopForumSpam's timezone.
 		$timezone = new DateTimeZone(self::SFS_TIMEZONE);
 
+		// If we looked up a username, arm the username fields with the necessary data.
 		if($this->username_data)
 		{
 			$this->username_appears = ($data['username']['appears'] === 1) ? true : false;
@@ -162,6 +163,7 @@ class SFSResult implements ArrayAccess
 				$this->username_lastseen = DateTime::createFromFormat(self::SFS_DATETIME_FORMAT, $data['username']['lastseen'], $timezone);
 		}
 
+		// If we looked up an email address, arm the email fields with the necessary data.
 		if($this->email_data)
 		{
 			$this->email_appears = ($data['email']['appears'] === 1) ? true : false;
@@ -170,6 +172,7 @@ class SFSResult implements ArrayAccess
 				$this->email_lastseen = DateTime::createFromFormat(self::SFS_DATETIME_FORMAT, $data['email']['lastseen'], $timezone);
 		}
 
+		// If we looked up an IP address, arm the IP fields with the necessary data.
 		if($this->ip_data)
 		{
 			$this->ip_appears = ($data['ip']['appears'] === 1) ? true : false;

@@ -1,30 +1,37 @@
 <?php
+/**
+ *
+ *===================================================================
+ *
+ *  StopForumSpam integration library
+ *-------------------------------------------------------------------
+ * @package     sfsintegration
+ * @author      Damian Bushong
+ * @copyright   (c) 2010 Damian Bushong
+ * @license     MIT License
+ * @link        http://github.com/Obsidian1510/SFSIntegration
+ *
+ *===================================================================
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.
+ *
+ */
 
+/**
+ * The following is an example file demonstrating how the
+ * StopForumSpam integration library should be prepared for use
+ * within your own code.
+ */
+
+// Define the required root include path for the StopForumSpam integration library, and for the OpenFlame Framework.
 define('SFSLIB', dirname(__FILE__) . '/src/');
-
 define('OF_ROOT', dirname(__FILE__) . '/vendor/OpenFlame/src/');
-require OF_ROOT . 'Of.php';
-require OF_ROOT . 'OfException.php';
 
-// Register the OpenFlame Framework autoloader
-spl_autoload_register('Of::loader');
-
-try
-{
-	$cache = new OfCache('JSON', dirname(__FILE__) . '/data/cache');
-	Of::storeObject('cache', $cache);
-}
-catch(OfException $e)
-{
-	// it's recommended that you do something here regarding error handling if we failed to start up the cache
-	echo $e->getMessage() . PHP_EOL;
-	exit;
-}
-
+// Include our main file here.  We need this as it houses the autoloader.
 require SFSLIB . 'SFS.php';
-require SFSLIB . 'SFSException.php';
 
-// Register our own autoloader
+// Register our own autoloader here.
 spl_autoload_register('SFS::loader');
 
 // Instantiate the main StopForumSpam interaction object.

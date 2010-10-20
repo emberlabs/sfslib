@@ -85,6 +85,8 @@ class SFSRequest
 	 * Sets the email that we are checking.
 	 * @var string $email - The email address to check.
 	 * @return SFSRequest - Provides a fluid interface.
+	 *
+	 * @throws SFSRequestException
 	 */
 	public function setEmail($email)
 	{
@@ -99,9 +101,23 @@ class SFSRequest
 	 * Sets the IP that we are checking.
 	 * @var string $ip - The IP to check.
 	 * @return SFSRequest - Provides a fluid interface.
+	 *
+	 * @throws SFSRequestException
 	 */
 	public function setIP($ip)
 	{
+		/**
+		 * Validation will check for IPv4 only, and no reserved or private IP ranges
+		 *
+		 * Validation will fail on the following IP ranges:
+		 * 0.0.0.0/8
+		 * 10.0.0.0/8
+		 * 169.254.0.0/16
+		 * 172.16.0.0/12
+		 * 192.0.2.0/24
+		 * 192.168.0.0/16
+		 * 224.0.0.0/4
+		 */
 		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 & FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) === false)
 			throw new SFSRequestException('Invalid IP address supplied', SFSRequestException::ERR_INVALID_IP_SUPPLIED);
 
@@ -137,6 +153,8 @@ class SFSRequest
 	/**
 	 * Build our UserAgent string, and be sure to include the library version plus the PHP version we are running.
 	 * @return string - The UserAgent string to send.
+	 *
+	 * @note useragent will look like the following:  PHP-SFSIntegration::0.1.0-DEV_PHP::5.3.2
 	 */
 	protected function buildUserAgent()
 	{
@@ -148,6 +166,8 @@ class SFSRequest
 	 * @return SFSResult - The results of the lookup.
 	 *
 	 * @throws SFSRequestException
+	 *
+	 * @todo maybe rewrite this, it's a hell of a mess and provides no way to force one method or the other
 	 */
 	public function send()
 	{
@@ -203,7 +223,7 @@ class SFSRequest
 			throw new SFSRequestException('No reliable method is available to send the request to the StopForumSpam API', SFSRequestException::ERR_NO_REQUEST_METHOD_AVAILABLE);
 		}
 
-
+		// If no JSON response received, asplode.
 		if(!$json)
 			throw new SFSRequestException('No data recieved from SFS API', SFSRequestException::ERR_API_RETURN_EMPTY);
 
@@ -214,6 +234,8 @@ class SFSRequest
 		}
 		catch(OfJSONException $e)
 		{
+			// Bad JSON, we'll chain the exception.
+			// Also, due to how OfJSON is coded, this will return much more detailed errors in environments with PHP 5.3.0 or newer.
 			throw new SFSRequestException(sprintf('Invalid JSON recieved from SFS API - %1$s', $e->getMessage()), SFSRequestException::ERR_API_RETURNED_BAD_JSON);
 		}
 
@@ -221,6 +243,7 @@ class SFSRequest
 		if(isset($data['error']))
 			throw new SFSRequestException(sprintf('StopForumSpam API error: %1$s', $data['error']), SFSRequestException::ERR_API_RETURNED_ERROR);
 
+		// Pass the requested data to the SFSResult object instantiation, so we know what we requested.
 		$requested_data = array('username' => $this->username, 'email' => $this->email, 'ip' => $this->ip);
 
 		return new SFSResult($this->sfs, $data, $requested_data);
