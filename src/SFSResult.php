@@ -212,6 +212,7 @@ class SFSResult implements ArrayAccess
 				'lastseen'		=> &$this->username_lastseen,
 			));
 		}
+		return $return;
 	}
 
 	/**
@@ -231,6 +232,7 @@ class SFSResult implements ArrayAccess
 				'lastseen'		=> &$this->email_lastseen,
 			));
 		}
+		return $return;
 	}
 
 	/**
@@ -250,6 +252,7 @@ class SFSResult implements ArrayAccess
 				'lastseen'		=> &$this->ip_lastseen,
 			));
 		}
+		return $return;
 	}
 
 	/**
