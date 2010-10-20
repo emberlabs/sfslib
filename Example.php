@@ -51,3 +51,8 @@ catch(SFSException $e)
 	echo $e->getMessage() . PHP_EOL;
 	exit;
 }
+
+// Examples of accessing the SFSResult data
+print_r($result['username']['lastseen']); // object of type DateTime
+var_dump($result['email']); // array containing all result data that is available for the email looked up
+echo $result->getIPFrequency(); // integer of how many times the IP was found in the StopForumSpam database

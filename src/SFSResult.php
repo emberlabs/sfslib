@@ -68,7 +68,7 @@ class SFSResult implements ArrayAccess
 	/**
 	 * @var DateTime - The last time the username was reported to the StopForumSpam service.
 	 */
-	protected $username_lastseen;
+	protected $username_lastseen = NULL;
 
 	/**
 	 * @var array - Array of returned email results from StopForumSpam.
@@ -93,7 +93,7 @@ class SFSResult implements ArrayAccess
 	/**
 	 * @var DateTime - The last time the email was reported to the StopForumSpam service.
 	 */
-	protected $email_lastseen;
+	protected $email_lastseen = NULL;
 
 	/**
 	 * @var array - Array of returned IP results from StopForumSpam.
@@ -118,7 +118,7 @@ class SFSResult implements ArrayAccess
 	/**
 	 * @var DateTime - The last time the IP was reported to the StopForumSpam service.
 	 */
-	protected $ip_lastseen;
+	protected $ip_lastseen = NULL;
 
 	/**
 	 * @const string - The date() format for dates returned by the StopForumSpam service.
@@ -201,12 +201,17 @@ class SFSResult implements ArrayAccess
 	 */
 	protected function getUsernameToArray()
 	{
-		return array(
+		$return = array(
 			'data'			=> &$this->username_data,
 			'appears'		=> &$this->username_appears,
-			'frequency'		=> &$this->username_frequency,
-			'lastseen'		=> &$this->username_lastseen,
 		);
+		if($this->username_appears)
+		{
+			$return = array_merge($return, array(
+				'frequency'		=> &$this->username_frequency,
+				'lastseen'		=> &$this->username_lastseen,
+			));
+		}
 	}
 
 	/**
@@ -215,12 +220,17 @@ class SFSResult implements ArrayAccess
 	 */
 	protected function getEmailToArray()
 	{
-		return array(
+		$return = array(
 			'data'			=> &$this->email_data,
 			'appears'		=> &$this->email_appears,
-			'frequency'		=> &$this->email_frequency,
-			'lastseen'		=> &$this->email_lastseen,
 		);
+		if($this->email_appears)
+		{
+			$return = array_merge($return, array(
+				'frequency'		=> &$this->email_frequency,
+				'lastseen'		=> &$this->email_lastseen,
+			));
+		}
 	}
 
 	/**
@@ -229,12 +239,125 @@ class SFSResult implements ArrayAccess
 	 */
 	protected function getIPToArray()
 	{
-		return array(
+		$return = array(
 			'data'			=> &$this->ip_data,
 			'appears'		=> &$this->ip_appears,
-			'frequency'		=> &$this->ip_frequency,
-			'lastseen'		=> &$this->ip_lastseen,
 		);
+		if($this->ip_appears)
+		{
+			$return = array_merge($return, array(
+				'frequency'		=> &$this->ip_frequency,
+				'lastseen'		=> &$this->ip_lastseen,
+			));
+		}
+	}
+
+	/**
+	 * Retrieve the username we looked up.
+	 * @return string - The username we looked up.
+	 */
+	public function getUsernameData()
+	{
+		return (string) $this->username_data;
+	}
+
+	/**
+	 * Retrieve whether or not the username appears in the StopForumSpam database.
+	 * @return boolean - Was the data found in the API query?
+	 */
+	public function getUsernameAppears()
+	{
+		return (bool) $this->username_appears;
+	}
+
+	/**
+	 * Retrieve how many times the data was found in the StopForumSpam database.
+	 * @return integer - How many times was the data found in the API query?
+	 */
+	public function getUsernameFrequency()
+	{
+		return (int) $this->username_frequency;
+	}
+
+	/**
+	 * Retrieve the DateTime object representing when the username was last reported to StopForumSpam.
+	 * @return mixed - NULL if username was never found in the request, or a DateTime object representing when the username was last reported.
+	 */
+	public function getUsernameLastseen()
+	{
+		return $this->username_lastseen;
+	}
+
+	/**
+	 * Retrieve the email we looked up.
+	 * @return string - The email we looked up.
+	 */
+	public function getEmailData()
+	{
+		return (string) $this->email_data;
+	}
+
+	/**
+	 * Retrieve whether or not the IP appears in the StopForumSpam database.
+	 * @return boolean - Was the data found in the API query?
+	 */
+	public function getEmailAppears()
+	{
+		return (bool) $this->email_appears;
+	}
+
+	/**
+	 * Retrieve how many times the data was found in the StopForumSpam database.
+	 * @return integer - How many times was the data found in the API query?
+	 */
+	public function getEmailFrequency()
+	{
+		return (int) $this->email_frequency;
+	}
+
+	/**
+	 * Retrieve the DateTime object representing when the email was last reported to StopForumSpam.
+	 * @return mixed - NULL if email was never found in the request, or a DateTime object representing when the email was last reported.
+	 */
+	public function getEmailLasteen()
+	{
+		return $this->email_lastseen;
+	}
+
+	/**
+	 * Retrieve the IP we looked up.
+	 * @return string - The IP we looked up.
+	 */
+	public function getIPData()
+	{
+		return (string) $this->ip_data;
+	}
+
+	/**
+	 * Retrieve whether or not the IP appears in the StopForumSpam database.
+	 * @return boolean - Was the data found in the API query?
+	 */
+	public function getIPAppears()
+	{
+		return (bool) $this->ip_appears;
+	}
+
+	/**
+	 * Retrieve how many times the data was found in the StopForumSpam database.
+	 * @return integer - How many times was the data found in the API query?
+	 */
+	public function getIPFrequency()
+	{
+		return (int) $this->ip_frequency;
+	}
+
+	/**
+	 * Retrieve the DateTime object representing when the IP was last reported to StopForumSpam.
+	 * @return mixed - NULL if IP was never found in the request, or a DateTime object representing when the IP was last reported.
+	 */
+	public function getIPLastseen()
+	{
+		return $this->ip_lastseen;
 	}
 
 	/**
