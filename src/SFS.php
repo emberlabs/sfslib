@@ -41,43 +41,6 @@ class SFS
 	protected $request_timeout = 2;
 
 	/**
-	 * @var integer - The time to store SFS data for, in seconds.  Default is 21600 seconds (or 6 hours).
-	 */
-	protected $cache_ttl = 21600;
-
-	/**
-	 * Constructor
-	 * @return void
-	 *
-	 * @throws Exception
-	 */
-	public function __construct()
-	{
-		// If the "Of" class hasn't been loaded, let's load the basics and set the autoloader.
-		if(!class_exists('Of', false))
-		{
-			require OF_ROOT . 'Of.php';
-			require OF_ROOT . 'OfException.php';
-
-			// Register the OpenFlame Framework autoloader
-			spl_autoload_register('Of::loader');
-		}
-
-		// If our cache object isn't present, we want to instantiate it.
-		if(is_null(Of::getObject('cache')))
-		{
-			try
-			{
-				Of::storeObject('cache', new OfCache('JSON', dirname(__FILE__) . '/../data/cache'));
-			}
-			catch(OfException $e)
-			{
-				throw new Exception(sprintf('Failed to initialize cache object - "%1$s"', $e->getMessage()));
-			}
-		}
-	}
-
-	/**
 	 * Create a new StopForumSpam request instance.
 	 * @return SFSRequest - The StopForumSpam request instance.
 	 */
@@ -124,26 +87,6 @@ class SFS
 	public function setRequestTimeout($timeout)
 	{
 		$this->request_timeout = (int) $timeout;
-		return $this;
-	}
-
-	/**
-	 * Get the cache TTL for requesting data
-	 * @return integer - The cache TTL for request data, in seconds.
-	 */
-	public function getCacheTTL()
-	{
-		return (int) $this->cache_ttl;
-	}
-
-	/**
-	 * Set the cache TTL for requesting data
-	 * @param integer $ttl - The cache TTL to set, in seconds
-	 * @return SFS - Provides a fluent interface.
-	 */
-	public function setCacheTTL($ttl)
-	{
-		$this->cache_ttl = (int) $ttl;
 		return $this;
 	}
 }

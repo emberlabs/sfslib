@@ -26,7 +26,6 @@
 
 // Define the required root include path for the StopForumSpam integration library, and for the OpenFlame Framework.
 define('SFSLIB', dirname(__FILE__) . '/src/');
-define('OF_ROOT', dirname(__FILE__) . '/vendor/OpenFlame/src/');
 
 // Include our main file here.  We need this as it houses the autoloader.
 require SFSLIB . 'SFS.php';
@@ -38,7 +37,7 @@ spl_autoload_register('SFS::loader');
 $sfs = new SFS();
 
 // Example of how to set a bunch of options on the SFS library before you request...
-$sfs->setCacheTTL(43200)->setRequestTimeout(5);
+$sfs->setRequestTimeout(10);
 
 try
 {
