@@ -227,9 +227,9 @@ class SFSRequest
 		// Be prepared in case we get invalid JSON...
 		try
 		{
-			$data = OfJSON::decode($json, false);
+			$data = SFSJSON::decode($json, false);
 		}
-		catch(OfJSONException $e)
+		catch(SFSJSONException $e)
 		{
 			// Bad JSON, we'll chain the exception.
 			// Also, due to how OfJSON is coded, this will return much more detailed errors in environments with PHP 5.3.0 or newer.

@@ -78,46 +78,12 @@ class SFS
 	}
 
 	/**
-	 * Request a database check from the StopForumSpam service
-	 * @param string $username - The username to check
-	 * @param string $email - The email to check
-	 * @param string $ip - The IP to check
-	 * @return SFSResult - The result data from StopForumSpam.
-	 *
-	 * @note use try/catch around this method as methods called from this method will throw an exception on error
+	 * Create a new StopForumSpam request instance.
+	 * @return SFSRequest - The StopForumSpam request instance.
 	 */
-	public function requestCheck($username = '', $email = '', $ip = '')
+	public function newRequest()
 	{
-		/* @var $cache OfCache */
-		$cache = Of::obj('cache');
-
-		// If no items to check were provided, then why are we running this method?
-		if(!$username && !$email && !$ip)
-			return false;
-
-		// Check to see if we have the result data cached already...
-		$cache_data = $cache->loadData(hash('md5', "$username/$email/$ip"));
-
-		if(!is_null($cache_data))
-		{
-			$requested_data = array('username' => $username, 'email' => $email, 'ip' => $ip);
-			return new SFSResult($this, $cache_data, $requested_data);
-		}
-		else
-		{
-			// Create a new SFSRequest object, and arm it with the details we are looking for
-			$request = new SFSRequest($this);
-			$result = $request
-				->setUsername($username)
-				->setEmail($email)
-				->setIP($ip)
-				->send();
-
-			// Store the data from StopForumSpam in the cache for now.
-			$cache->storeData(hash('md5', "$username/$email/$ip"), $result->toArray(), $this->cache_ttl);
-
-			return $result;
-		}
+		return new SFSRequest($this);
 	}
 
 	/**
