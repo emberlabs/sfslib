@@ -43,7 +43,7 @@ $sfs->setCacheTTL(43200)->setRequestTimeout(5);
 try
 {
 	// @note $result is an object of type SFSResult, and can have its properties accessed as an array, or through its built-in methods.
-	$result = $sfs->requestCheck('Some username here', 'someemail@email.tld', '127.0.0.2');
+	$result = $sfs->newRequest()->setUsername('Some username here')->setEmail('someemail@email.tld')->setIP('127.0.0.2');
 }
 catch(SFSException $e)
 {
