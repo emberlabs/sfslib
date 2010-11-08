@@ -28,10 +28,11 @@
  * @license     MIT License
  * @link        http://github.com/Obsidian1510/SFSIntegration
  *
- * @note reserves 110xx error codes
+ * @note reserves 11xxx error codes
  */
 class SFSRequestException extends SFSException
 {
+	// SFSRequest exception constants
 	const ERR_NO_REQUEST_DATA = 11000;
 	const ERR_API_RETURN_EMPTY = 11001;
 	const ERR_API_RETURNED_BAD_JSON = 11002;
@@ -39,4 +40,8 @@ class SFSRequestException extends SFSException
 	const ERR_NO_REQUEST_METHOD_AVAILABLE = 11004;
 	const ERR_INVALID_EMAIL_SUPPLIED = 11005;
 	const ERR_INVALID_IP_SUPPLIED = 11006;
+
+	// SFSRequestResult exception constants
+	const ERR_NO_ACCESS_DATA_ARRAYACCESS = 11100;
+	const ERR_NO_MODIFY_DATA_ARRAYACCESS = 11101;
 }

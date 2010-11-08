@@ -28,7 +28,7 @@
  * @license     MIT License
  * @link        http://github.com/Obsidian1510/SFSIntegration
  */
-class SFSResult implements ArrayAccess
+class SFSRequestResult implements ArrayAccess
 {
 	/**
 	 * @var SFS - The primary StopForumSpam object.
@@ -392,7 +392,7 @@ class SFSResult implements ArrayAccess
 	 * @param mixed $offset - The offset to grab from.
 	 * @return mixed - The value of the offset, or null if the offset does not exist.
 	 *
-	 * @throws SFSResultException
+	 * @throws SFSRequestException
 	 */
 	public function offsetGet($offset)
 	{
@@ -400,7 +400,7 @@ class SFSResult implements ArrayAccess
 			return NULL;
 
 		if(!$this->checkAllowArrayAccess($offset))
-			throw new SFSResultException('Access of protected values in instantiated SFSResult object is not permitted', SFSResultException::ERR_NO_MODIFY_DATA_ARRAYACCESS);
+			throw new SFSRequestException('Access of protected values in instantiated SFSResult object is not permitted', SFSRequestException::ERR_NO_MODIFY_DATA_ARRAYACCESS);
 
 		return $this->$offset;
 	}
@@ -411,11 +411,11 @@ class SFSResult implements ArrayAccess
 	 * @param mixed $value - The value to set to the offset.
 	 * @return void
 	 *
-	 * @throws SFSResultException
+	 * @throws SFSRequestException
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new SFSResultException('Modification of values in instantiated SFSResult object is not permitted', SFSResultException::ERR_NO_MODIFY_DATA_ARRAYACCESS);
+		throw new SFSRequestException('Modification of values in instantiated SFSResult object is not permitted', SFSRequestException::ERR_NO_MODIFY_DATA_ARRAYACCESS);
 	}
 
 	/**
@@ -423,10 +423,10 @@ class SFSResult implements ArrayAccess
 	 * @param mixed $offset - The offset to clear out.
 	 * @return void
 	 *
-	 * @throws SFSResultException
+	 * @throws SFSRequestException
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new SFSResultException('Modification of values in instantiated SFSResult object is not permitted', SFSResultException::ERR_NO_MODIFY_DATA_ARRAYACCESS);
+		throw new SFSRequestException('Modification of values in instantiated SFSResult object is not permitted', SFSRequestException::ERR_NO_MODIFY_DATA_ARRAYACCESS);
 	}
 }
