@@ -37,12 +37,11 @@ spl_autoload_register('SFS::loader');
 $sfs = new SFS();
 
 // Example of how to set a bunch of options on the SFS library before you request...
-$sfs->setRequestTimeout(10);
+$sfs->setTimeout(10);
 
 try
 {
-	// @note $result is an object of type SFSResult, and can have its properties accessed as an array, or through its built-in methods.
-	$result = $sfs->newRequest()->setUsername('Some username here')->setEmail('someemail@email.tld')->setIP('127.0.0.2');
+	// @note $result is an object of type SFSRequestResult, and can have its properties accessed as an array, or through its built-in methods.
 	$result = $sfs->newRequest()->setUsername('Some username here')->setEmail('someemail@email.tld')->setIP('127.0.0.2')->send();
 }
 catch(SFSException $e)
@@ -52,7 +51,7 @@ catch(SFSException $e)
 	exit;
 }
 
-// Examples of accessing the SFSResult data
+// Examples of accessing the SFSRequestResult data
 print_r($result['username']['lastseen']); // object of type DateTime
 var_dump($result['email']); // array containing all result data that is available for the email looked up
 echo $result->getIPFrequency(); // integer of how many times the IP was found in the StopForumSpam database
