@@ -43,6 +43,7 @@ try
 {
 	// @note $result is an object of type SFSResult, and can have its properties accessed as an array, or through its built-in methods.
 	$result = $sfs->newRequest()->setUsername('Some username here')->setEmail('someemail@email.tld')->setIP('127.0.0.2');
+	$result = $sfs->newRequest()->setUsername('Some username here')->setEmail('someemail@email.tld')->setIP('127.0.0.2')->send();
 }
 catch(SFSException $e)
 {
