@@ -83,7 +83,7 @@ class SFSRequest extends SFSTransmission
 					// Setup the stream timeout, just in case
 					$ctx = stream_context_create(array(
 						'http'	=> array(
-							'timeout'	=> $this->sfs->getRequestTimeout(),
+							'timeout'	=> $this->sfs->getTimeout(),
 						),
 					));
 
@@ -103,7 +103,7 @@ class SFSRequest extends SFSTransmission
 			// Setup the stream timeout, just in case
 			$ctx = stream_context_create(array(
 				'http'	=> array(
-					'timeout'	=> $this->sfs->getRequestTimeout(),
+					'timeout'	=> $this->sfs->getTimeout(),
 				),
 			));
 
