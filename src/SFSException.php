@@ -27,8 +27,13 @@
  * @author      Damian Bushong
  * @license     MIT License
  * @link        http://github.com/Obsidian1510/SFSIntegration
+ *
+ * @note reserves 0, 10xxx error codes
  */
 class SFSException extends Exception
 {
 	const ERR_WTF = 0;
+
+	const ERR_REQUEST_METHOD_OVERRIDE_INVALID = 10000;
+	const ERR_REPORT_METHOD_OVERRIDE_INVALID = 10001;
 }

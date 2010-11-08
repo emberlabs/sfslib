@@ -172,18 +172,27 @@ class SFS
 	}
 
 	/**
-	 * Overrride the transmission method to use for reporting spammers.
-	 * @param integer $method - The transmission method to use for reports.
+	 * Get the method currently overriding the request transmission method.
+	 * @return mixed - NULL if no override present, or the method's constant value if present.
+	 */
+	public function getRequestMethod()
+	{
+		return $this->request_method;
+	}
+
+	/**
+	 * Overrride the transmission method to use for requesting a StopForumSpam database query.
+	 * @param integer $method - The transmission method to use for requests.
 	 * @return SFS - Provides a fluent interface.
 	 *
 	 * @throws SFSException
 	 */
-	public function setReportMethod($method)
+	public function setRequestMethod($method)
 	{
-		if(!in_array($method, array(self::TRX_REPORT_GET_CURL, self::TRX_REPORT_GET_FILE, self::TRX_REPORT_POST_CURL, self::TRX_REPORT_POST_SOCKET)))
-			throw new SFSException();
+		if(!in_array($method, array(self::TRX_REQUEST_CURL, self::TRX_REQUEST_FILE)))
+			throw new SFSException('Invalid request transmission method specified', SFSException::ERR_REQUEST_METHOD_OVERRIDE_INVALID);
 
-		$this->report_method = $method;
+		$this->request_method = $method;
 		return $this;
 	}
 
@@ -197,27 +206,18 @@ class SFS
 	}
 
 	/**
-	 * Overrride the transmission method to use for requesting a StopForumSpam database query.
-	 * @param integer $method - The transmission method to use for requests.
+	 * Overrride the transmission method to use for reporting spammers.
+	 * @param integer $method - The transmission method to use for reports.
 	 * @return SFS - Provides a fluent interface.
 	 *
 	 * @throws SFSException
 	 */
-	public function setRequestMethod($method)
+	public function setReportMethod($method)
 	{
-		if(!in_array($method, array(self::TRX_REQUEST_CURL, self::TRX_REQUEST_FILE)))
-			throw new SFSException();
+		if(!in_array($method, array(self::TRX_REPORT_GET_CURL, self::TRX_REPORT_GET_FILE, self::TRX_REPORT_POST_CURL, self::TRX_REPORT_POST_SOCKET)))
+			throw new SFSException('Invalid report transmission method specified', SFSException::ERR_REPORT_METHOD_OVERRIDE_INVALID);
 
-		$this->request_method = $method;
+		$this->report_method = $method;
 		return $this;
-	}
-
-	/**
-	 * Get the method currently overriding the request transmission method.
-	 * @return mixed - NULL if no override present, or the method's constant value if present.
-	 */
-	public function getRequestMethod()
-	{
-		return $this->request_method;
 	}
 }
