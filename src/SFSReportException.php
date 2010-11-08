@@ -28,14 +28,9 @@
  * @license     MIT License
  * @link        http://github.com/Obsidian1510/SFSIntegration
  *
- * @note reserves 12xxx error codes
+ * @note reserves 140xx error codes
  */
-class SFSJSONException extends Exception
+class SFSReportException extends SFSException
 {
-	const ERR_JSON_NO_FILE = 12000;
-	const ERR_JSON_UNKNOWN = 12001;
-	const ERR_JSON_NO_ERROR = 12002;
-	const ERR_JSON_DEPTH = 12003;
-	const ERR_JSON_CTRL_CHAR = 12004;
-	const ERR_JSON_SYNTAX = 12005;
+	// asdf
 }

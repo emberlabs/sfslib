@@ -30,12 +30,8 @@
  *
  * @note reserves 12xxx error codes
  */
-class SFSJSONException extends Exception
+class SFSTransmissionException extends SFSException
 {
-	const ERR_JSON_NO_FILE = 12000;
-	const ERR_JSON_UNKNOWN = 12001;
-	const ERR_JSON_NO_ERROR = 12002;
-	const ERR_JSON_DEPTH = 12003;
-	const ERR_JSON_CTRL_CHAR = 12004;
-	const ERR_JSON_SYNTAX = 12005;
+	const ERR_INVALID_EMAIL_SUPPLIED = 12000;
+	const ERR_INVALID_IP_SUPPLIED = 12001;
 }
