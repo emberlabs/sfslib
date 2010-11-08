@@ -107,7 +107,7 @@ class SFSRequest extends SFSTransmission
 				),
 			));
 
-			$json = @file_get_contents($this->buildURL() . sprintf('&useragent=%1$s', urlencode('SFSIntegration_PHP-' . SFS::VERSION . ' PHP ' . PHP_VERSION)), false, $ctx);
+			$json = @file_get_contents($this->buildURL() . sprintf('&useragent=%1$s', urlencode($this->buildUserAgent())), false, $ctx);
 		}
 		else
 		{
