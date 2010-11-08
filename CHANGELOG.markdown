@@ -21,3 +21,5 @@ Changes in 0.3.0:
 * Renamed SFS->getRequestTimeout() to SFS->getTimeout()
 * Renamed SFS->setRequestTimeout() to SFS->setTimeout()
 * Added ability to force a certain transmission method on reports and requests.  If the method fails, **no** fallback is used.
+* Fix issue with SFSRequest not using SFSTransmission->buildUserAgent() for one certain transmission method
+* Resorted exception error codes so that dominant classes get the lower error codes.
