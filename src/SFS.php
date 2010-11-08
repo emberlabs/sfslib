@@ -36,6 +36,11 @@ class SFS
 	const VERSION = '0.3.0-DEV';
 
 	/**
+	 * @const - The regular expression to use when checking to see if an API key is valid or not.
+	 */
+	const API_KEY_REGEX = '#[a-zA-Z0-9]{14}#';
+
+	/**
 	 * @const - Flag to state that the curl GET method should only be used for reporting spammers.
 	 * @note This disables the ability to send the data from the "evidence" field.
 	 */
@@ -165,7 +170,10 @@ class SFS
 	 */
 	public function setAPIKey($api_key)
 	{
-		// validate API key here
+		// Make sure this API key they are giving us is a valid key by way of regexp (we can't check if it is an actual key, though).
+		if(filter_var($api_key, FILTER_VALIDATE_REGEXP, array('regexp' => self::API_KEY_REGEX)) === false)
+			throw new SFSException("Invalid API key entered", SFSException::ERR_INVALID_API_KEY);
+
 		$this->api_key = $api_key;
 
 		return $this;
