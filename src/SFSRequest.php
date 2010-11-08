@@ -31,12 +31,12 @@
 class SFSRequest extends SFSTransmission
 {
 	/**
-	 * @var string - Constant defining what API retrieval method we are using here.
+	 * @const - Constant defining what API response serialization method we are using here.
 	 */
 	const SFS_API_METHOD = 'json';
 
 	/**
-	 * @var string - Constant defining the base URL of the StopForumSpam API.
+	 * @const - Constant defining the base URL of the StopForumSpam API.
 	 */
 	const SFS_API_URL = 'http://www.stopforumspam.com/api';
 

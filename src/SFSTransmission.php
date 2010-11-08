@@ -31,17 +31,17 @@
 abstract class SFSTransmission
 {
 	/**
-	 * @var string - The username to look up.
+	 * @var string - The username to use for the transmission.
 	 */
 	protected $username = '';
 
 	/**
-	 * @var string - The email to look up.
+	 * @var string - The email to use for the transmission.
 	 */
 	protected $email = '';
 
 	/**
-	 * @var string - The IP to look up.
+	 * @var string - The IP to use for the transmission.
 	 */
 	protected $ip = '';
 
@@ -61,7 +61,7 @@ abstract class SFSTransmission
 	}
 
 	/**
-	 * Sets the username that we are checking.
+	 * Sets the username that we are transmitting.
 	 * @var string $username - The username to check.
 	 * @return SFSRequest - Provides a fluid interface.
 	 */
@@ -72,7 +72,7 @@ abstract class SFSTransmission
 	}
 
 	/**
-	 * Sets the email that we are checking.
+	 * Sets the email that we are transmitting.
 	 * @var string $email - The email address to check.
 	 * @return SFSRequest - Provides a fluid interface.
 	 *
@@ -88,7 +88,7 @@ abstract class SFSTransmission
 	}
 
 	/**
-	 * Sets the IP that we are checking.
+	 * Sets the IP that we are transmitting.
 	 * @var string $ip - The IP to check.
 	 * @return SFSRequest - Provides a fluid interface.
 	 *
