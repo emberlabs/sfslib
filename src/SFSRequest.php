@@ -28,7 +28,7 @@
  * @license     MIT License
  * @link        http://github.com/Obsidian1510/SFSIntegration
  */
-class SFSRequest
+class SFSRequest extends SFSTransmission
 {
 	/**
 	 * @var string - Constant defining what API retrieval method we are using here.
@@ -39,101 +39,6 @@ class SFSRequest
 	 * @var string - Constant defining the base URL of the StopForumSpam API.
 	 */
 	const SFS_API_URL = 'http://www.stopforumspam.com/api';
-
-	/**
-	 * @var string - The username to look up.
-	 */
-	protected $username = '';
-
-	/**
-	 * @var string - The email to look up.
-	 */
-	protected $email = '';
-
-	/**
-	 * @var string - The IP to look up.
-	 */
-	protected $ip = '';
-
-	/**
-	 * @var SFS - The primary StopForumSpam object.
-	 */
-	protected $sfs;
-
-	/**
-	 * Constructor
-	 * @param SFS $sfs - The primary SFS interaction object.
-	 * @return void
-	 */
-	public function __construct(SFS $sfs)
-	{
-		$this->sfs = $sfs;
-	}
-
-	/**
-	 * Sets the username that we are checking.
-	 * @var string $username - The username to check.
-	 * @return SFSRequest - Provides a fluid interface.
-	 */
-	public function setUsername($username)
-	{
-		$this->username = $username;
-		return $this;
-	}
-
-	/**
-	 * Sets the email that we are checking.
-	 * @var string $email - The email address to check.
-	 * @return SFSRequest - Provides a fluid interface.
-	 *
-	 * @throws SFSRequestException
-	 */
-	public function setEmail($email)
-	{
-		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
-			throw new SFSRequestException('Invalid email address supplied', SFSRequestException::ERR_INVALID_EMAIL_SUPPLIED);
-
-		$this->email = $email;
-		return $this;
-	}
-
-	/**
-	 * Sets the IP that we are checking.
-	 * @var string $ip - The IP to check.
-	 * @return SFSRequest - Provides a fluid interface.
-	 *
-	 * @throws SFSRequestException
-	 */
-	public function setIP($ip)
-	{
-		/**
-		 * Validation will check for IPv4 only, and no reserved or private IP ranges
-		 *
-		 * Validation will fail on the following IP ranges:
-		 * 0.0.0.0/8
-		 * 10.0.0.0/8
-		 * 169.254.0.0/16
-		 * 172.16.0.0/12
-		 * 192.0.2.0/24
-		 * 192.168.0.0/16
-		 * 224.0.0.0/4
-		 */
-		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 & FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) === false)
-			throw new SFSRequestException('Invalid IP address supplied', SFSRequestException::ERR_INVALID_IP_SUPPLIED);
-
-		$this->ip = $ip;
-		return $this;
-	}
-
-	/**
-	 * Prepare data for the API request.  This is cut out into its own method in case it needs changed later, for a more thorough encode later on.
-	 * @param string $data - The information to prepare for submission...
-	 * @return string - The encoded data.
-	 */
-	protected function prepareAPIData($data)
-	{
-		return urlencode($data);
-	}
 
 	/**
 	 * Builds the URL for our StopForumSpam API _GET request, based on the chunks of information we are looking for.
@@ -148,17 +53,6 @@ class SFSRequest
 		$url .= 'f=' . self::SFS_API_METHOD;
 
 		return $url;
-	}
-
-	/**
-	 * Build our UserAgent string, and be sure to include the library version plus the PHP version we are running.
-	 * @return string - The UserAgent string to send.
-	 *
-	 * @note useragent will look like the following:  PHP-SFSIntegration::0.1.0-DEV_PHP::5.3.2
-	 */
-	protected function buildUserAgent()
-	{
-		return sprintf('PHP-SFSIntegration::%1$s_PHP::%2$s', SFS::VERSION, PHP_VERSION);
 	}
 
 	/**
