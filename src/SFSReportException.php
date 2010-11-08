@@ -28,9 +28,9 @@
  * @license     MIT License
  * @link        http://github.com/Obsidian1510/SFSIntegration
  *
- * @note reserves 140xx error codes
+ * @note reserves 14xxx error codes
  */
 class SFSReportException extends SFSException
 {
-	// asdf
+	const ERR_INVALID_API_KEY = 14000;
 }
