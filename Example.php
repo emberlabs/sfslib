@@ -24,7 +24,7 @@
  * within your own code.
  */
 
-// Define the required root include path for the StopForumSpam integration library, and for the OpenFlame Framework.
+// Define the required root include path for the StopForumSpam integration library.
 define('SFSLIB', dirname(__FILE__) . '/src/');
 
 // Include our main file here.  We need this as it houses the autoloader.
