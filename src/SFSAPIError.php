@@ -31,39 +31,39 @@
 class SFSAPIError implements Iterator
 {
 	/**
-	 * @const - Bitwise error flag used when an unknown error is found in the returned API error code.
+	 * @const - Error flag used when an unknown error is found in the returned API error code.
 	 */
-	const ERR_WTF = 0;
-
-	/**
-	 * @const - Bitwise error flag used when the IP submitted is invalid.
-	 */
-	const API_ERR_IP_INVALID = 1;
-
-	/**
-	 * @const - Bitwise error flag used when the username submitted is invalid.
-	 */
-	const API_ERR_USERNAME_INVALID = 2;
+	const ERR_WTF = -1;
 
 	/**
 	 * @const - Bitwise error flag used when the email address submitted is invalid.
 	 */
-	const API_ERR_EMAIL_INVALID = 4;
+	const API_ERR_EMAIL_INVALID = 1;
 
 	/**
-	 * @const - Bitwise error flag used when the email address submitted is rejected because StopForumSpam thinks it is our own.
+	 * @const - Bitwise error flag used when the IP submitted is invalid.
 	 */
-	const API_ERR_OWN_EMAIL_SUBMIT = 8;
+	const API_ERR_IP_INVALID = 2;
 
 	/**
-	 * @const - Bitwise error flag used when the IP address submitted is rejected because StopForumSpam thinks it is our own.
+	 * @const - Bitwise error flag used when the username submitted is invalid.
 	 */
-	const API_ERR_OWN_IP_SUBMIT = 16;
+	const API_ERR_USERNAME_INVALID = 4;
 
 	/**
 	 * @const - Bitwise error flag used when the API key submitted to StopForumSpam is considered "invalid".
 	 */
-	const API_ERR_API_KEY_INVALID = 32;
+	const API_ERR_API_KEY_INVALID = 8;
+
+	/**
+	 * @const - Bitwise error flag used when the email address submitted is rejected because StopForumSpam thinks it is our own.
+	 */
+	const API_ERR_OWN_EMAIL_SUBMIT = 16;
+
+	/**
+	 * @const - Bitwise error flag used when the IP address submitted is rejected because StopForumSpam thinks it is our own.
+	 */
+	const API_ERR_OWN_IP_SUBMIT = 32;
 
 	/**
 	 * @const - The maximum range of known errors that the StopForumSpam API can return.
@@ -74,12 +74,12 @@ class SFSAPIError implements Iterator
 	 * @var array - An array containing all of the bitwise error flags to check for in the returned error code, intended for use with foreach()
 	 */
 	protected $error_codes = array(
+		self::API_ERR_EMAIL_INVALID,
 		self::API_ERR_IP_INVALID,
 		self::API_ERR_USERNAME_INVALID,
-		self::API_ERR_EMAIL_INVALID,
+		self::API_ERR_API_KEY_INVALID,
 		self::API_ERR_OWN_EMAIL_SUBMIT,
 		self::API_ERR_OWN_IP_SUBMIT,
-		self::API_ERR_API_KEY_INVALID,
 	);
 
 	/**
@@ -87,12 +87,12 @@ class SFSAPIError implements Iterator
 	 */
 	protected $descriptions = array(
 		self::ERR_WTF					=> 'Unknown error',
+		self::API_ERR_EMAIL_INVALID		=> 'The email address provided was rejected by the StopForumSpam API.',
 		self::API_ERR_IP_INVALID		=> 'The IP address provided was rejected by the StopForumSpam API.',
 		self::API_ERR_USERNAME_INVALID	=> 'The username provided was rejected by the StopForumSpam API.',
-		self::API_ERR_EMAIL_INVALID		=> 'The email address provided was rejected by the StopForumSpam API.',
+		self::API_ERR_API_KEY_INVALID	=> 'The StopForumSpam API rejected the API key provided.',
 		self::API_ERR_OWN_EMAIL_SUBMIT	=> 'The StopForumSpam API rejected the email address provided as it does not allow reporting your own email address.',
 		self::API_ERR_OWN_IP_SUBMIT		=> 'The StopForumSpam API rejected the IP address provided as it does not allow reporting your own IP address.',
-		self::API_ERR_API_KEY_INVALID	=> 'The StopForumSpam API rejected the API key provided.',
 	);
 
 	/**
