@@ -71,6 +71,11 @@ class SFSRequestResult implements ArrayAccess
 	protected $username_lastseen = NULL;
 
 	/**
+	 * @var DateInterval - The time interval between now and the time that the username was last reported.
+	 */
+	protected $username_lastseen_span = NULL;
+
+	/**
 	 * @var array - Array of returned email results from StopForumSpam.
 	 */
 	protected $email = array();
@@ -96,6 +101,11 @@ class SFSRequestResult implements ArrayAccess
 	protected $email_lastseen = NULL;
 
 	/**
+	 * @var DateInterval - The time interval between now and the time that the email was last reported.
+	 */
+	protected $email_lastseen_span = NULL;
+
+	/**
 	 * @var array - Array of returned IP results from StopForumSpam.
 	 */
 	protected $ip = array();
@@ -119,6 +129,11 @@ class SFSRequestResult implements ArrayAccess
 	 * @var DateTime - The last time the IP was reported to the StopForumSpam service.
 	 */
 	protected $ip_lastseen = NULL;
+
+	/**
+	 * @var DateInterval - The time interval between now and the time that the username was last reported.
+	 */
+	protected $ip_lastseen_span = NULL;
 
 	/**
 	 * @const string - The date() format for dates returned by the StopForumSpam service.
@@ -154,13 +169,19 @@ class SFSRequestResult implements ArrayAccess
 		// Instantiate the DateTimeZone object for StopForumSpam's timezone.
 		$timezone = new DateTimeZone(self::SFS_TIMEZONE);
 
+		// Get the current time.
+		$now = new DateTime('now', $timezone);
+
 		// If we looked up a username, arm the username fields with the necessary data.
 		if($this->username_data)
 		{
 			$this->username_appears = ($data['username']['appears'] === 1) ? true : false;
 			$this->username_frequency = (int) $data['username']['frequency'];
 			if($this->username_appears)
+			{
 				$this->username_lastseen = DateTime::createFromFormat(self::SFS_DATETIME_FORMAT, $data['username']['lastseen'], $timezone);
+				$this->username_lastseen_span = (!defined('SFSLIB_COMPATIBILITY_MODE')) ? $this->username_lastseen->diff($now, true) : false;
+			}
 		}
 
 		// If we looked up an email address, arm the email fields with the necessary data.
@@ -169,7 +190,10 @@ class SFSRequestResult implements ArrayAccess
 			$this->email_appears = ($data['email']['appears'] === 1) ? true : false;
 			$this->email_frequency = (int) $data['email']['frequency'];
 			if($this->email_appears)
+			{
 				$this->email_lastseen = DateTime::createFromFormat(self::SFS_DATETIME_FORMAT, $data['email']['lastseen'], $timezone);
+				$this->email_lastseen_span = (!defined('SFSLIB_COMPATIBILITY_MODE')) ? $this->email_lastseen->diff($now, true): false;
+			}
 		}
 
 		// If we looked up an IP address, arm the IP fields with the necessary data.
@@ -178,7 +202,10 @@ class SFSRequestResult implements ArrayAccess
 			$this->ip_appears = ($data['ip']['appears'] === 1) ? true : false;
 			$this->ip_frequency = (int) $data['ip']['frequency'];
 			if($this->ip_appears)
+			{
 				$this->ip_lastseen = DateTime::createFromFormat(self::SFS_DATETIME_FORMAT, $data['ip']['lastseen'], $timezone);
+				$this->ip_lastseen_span = (!defined('SFSLIB_COMPATIBILITY_MODE')) ? $this->ip_lastseen->diff($now, true) : false;
+			}
 		}
 
 		$this->username = $this->getUsernameToArray();
@@ -210,6 +237,7 @@ class SFSRequestResult implements ArrayAccess
 			$return = array_merge($return, array(
 				'frequency'		=> &$this->username_frequency,
 				'lastseen'		=> &$this->username_lastseen,
+				'lastseen_span'	=> &$this->username_lastseen_span,
 			));
 		}
 		return $return;
@@ -230,6 +258,7 @@ class SFSRequestResult implements ArrayAccess
 			$return = array_merge($return, array(
 				'frequency'		=> &$this->email_frequency,
 				'lastseen'		=> &$this->email_lastseen,
+				'lastseen_span'	=> &$this->email_lastseen_span,
 			));
 		}
 		return $return;
@@ -250,6 +279,7 @@ class SFSRequestResult implements ArrayAccess
 			$return = array_merge($return, array(
 				'frequency'		=> &$this->ip_frequency,
 				'lastseen'		=> &$this->ip_lastseen,
+				'lastseen_span'	=> &$this->ip_lastseen_span,
 			));
 		}
 		return $return;
@@ -292,6 +322,15 @@ class SFSRequestResult implements ArrayAccess
 	}
 
 	/**
+	 * Retrieve the DateInterval object representing the interval of time between now and the last time the username was reported.
+	 * @return mixed - NULL if username was never found in the request, false if PHP 5.3 is not present, or a DateInterval object representing the interval of time since the username was last reported.
+	 */
+	public function getUsernameLastseenSpan()
+	{
+		return $this->username_lastseen_span;
+	}
+
+	/**
 	 * Retrieve the email we looked up.
 	 * @return string - The email we looked up.
 	 */
@@ -328,6 +367,15 @@ class SFSRequestResult implements ArrayAccess
 	}
 
 	/**
+	 * Retrieve the DateInterval object representing the interval of time between now and the last time the email was reported.
+	 * @return mixed - NULL if email was never found in the request, false if PHP 5.3 is not present, or a DateInterval object representing the interval of time since the email was last reported.
+	 */
+	public function getEmailLastseenSpan()
+	{
+		return $this->email_lastseen_span;
+	}
+
+	/**
 	 * Retrieve the IP we looked up.
 	 * @return string - The IP we looked up.
 	 */
@@ -361,6 +409,15 @@ class SFSRequestResult implements ArrayAccess
 	public function getIPLastseen()
 	{
 		return $this->ip_lastseen;
+	}
+
+	/**
+	 * Retrieve the DateInterval object representing the interval of time between now and the last time the IP was reported.
+	 * @return mixed - NULL if IP was never found in the request, false if PHP 5.3 is not present, or a DateInterval object representing the interval of time since the IP was last reported.
+	 */
+	public function getIPLastseenSpan()
+	{
+		return $this->ip_lastseen_span;
 	}
 
 	/**

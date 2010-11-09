@@ -93,6 +93,16 @@ class SFS
 	protected $api_key = '';
 
 	/**
+	 * Constructor
+	 * @return void
+	 */
+	public function __construct()
+	{
+		if(version_compare(PHP_VERSION, '5.3.0', '<'))
+			define('SFSLIB_COMPATIBILITY_MODE', true);
+	}
+
+	/**
 	 * Autoloader method
 	 * @param string $class - The class to load up
 	 * @return boolean - True if load successful, false if we could not find the file to load

@@ -23,3 +23,4 @@ Changes in 0.3.0:
 * Added ability to force a certain transmission method on reports and requests.  If the method fails, **no** fallback is used.
 * Fix issue with SFSRequest not using SFSTransmission->buildUserAgent() for one certain transmission method
 * Resorted exception error codes so that dominant classes get the lower error codes.
+* Provide a DateInterval object via SFSRequestResult->getUsernameLastseenSpan(), SFSRequestResult->getEmailLastseenSpan(), and SFSRequestResult->getIPLastseenSpan() in the SFSRequestResult results, to show the time interval between now and when the username/email/IP was last reported.  Requires PHP 5.3 in order for this feature to be available, otherwise false will be returned for these methods when data is expected.
