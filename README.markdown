@@ -10,7 +10,8 @@ Please note that the library is not intended to be used as a firewall, and that 
 ## Requirements
 
 * PHP 5.2.3
-* Installation of the OpenFlame Framework, available at http://github.com/OpenFlame/OpenFlame-Framework
+* Ability to open external network connections in PHP
+* JSON support in PHP
 
 ## Installation
 
@@ -19,7 +20,7 @@ Via Linux, or git bash in msysgit for Windows
 	git clone http://github.com/Obsidian1510/SFSIntegration.git
 	cd ./SFSIntegration
 
-This will download the StopForumSpam integration Library along with its dependency, the OpenFlame Framework.
+This will download the StopForumSpam integration library.
 
 ### Notes
 
