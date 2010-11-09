@@ -51,19 +51,22 @@ class SFSReport extends SFSTransmission
 	protected $evidence;
 
 	/**
-	 * asdf
+	 * Set the evidence that we are going to submit to StopForumSpam for our spammer report
+	 * @param string $evidence - The evidence to submit
+	 * @return SFSReport - Provides a fluent interface.
 	 */
 	public function setEvidence($evidence)
 	{
-		// asdf
+		$this->evidence = $evidence;
+		return $this;
 	}
 
 	/**
 	 * Set the API key to use for reporting spammers.
 	 * @param string $api_key - The API key to use.
-	 * @return SFS - Provides a fluent interface.
+	 * @return SFSReport - Provides a fluent interface.
 	 *
-	 * @throws SFSException
+	 * @throws SFSReportException
 	 */
 	public function setAPIKey($api_key)
 	{
