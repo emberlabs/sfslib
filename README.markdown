@@ -22,6 +22,20 @@ Via Linux, or git bash in msysgit for Windows
 
 This will download the StopForumSpam integration library.
 
+Optionally, you may verify the phar archive if you have the phar-util package installed via PEAR.
+
+### Compiling an updated PHAR package
+
+Install the phar-util package <http://github.com/koto/phar-util> via PEAR, if you have not done so already
+    $ sudo pear channel-discover pear.kotowicz.net
+    $ sudo pear install kotowicz/PharUtil-beta
+
+Make changes to the files in the **src/** directory, then build the package (without signing it)
+    $ ./build/unsigned-build.sh
+
+Using the compile-on-commit script (without signing it)
+    $ cp build/hooks/autobuild-unsigned .git/hooks/pre-commit
+
 ### Notes
 
 This library is not an official product of the StopForumSpam service.
