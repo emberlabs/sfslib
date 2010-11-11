@@ -421,6 +421,15 @@ class SFSRequestResult implements ArrayAccess
 	}
 
 	/**
+	 * Retrieve whether or not the lookup was successful.
+	 * @return boolean - Was the lookup successful?
+	 */
+	public function getSuccessful()
+	{
+		return $this->successful;
+	}
+
+	/**
 	 * Check to see if the offset we are accessing via ArrayAccess is something we're allowed to look at.
 	 * @param string $offset - The offset we want to access.
 	 * @return boolean - Are we allowed to access this offset?

@@ -25,3 +25,4 @@ Changes in 0.3.0:
 * Resorted exception error codes so that dominant classes get the lower error codes.
 * Provide a DateInterval object via SFSRequestResult->getUsernameLastseenSpan(), SFSRequestResult->getEmailLastseenSpan(), and SFSRequestResult->getIPLastseenSpan() in the SFSRequestResult results, to show the time interval between now and when the username/email/IP was last reported.  Requires PHP 5.3 in order for this feature to be available, otherwise false will be returned for these methods when data is expected.
 * Add scripts for building PHAR packages easily for PHP 5.3+ users.
+* Added method SFSRequestResult->getSuccessful() to see if the lookup was successful or not.
