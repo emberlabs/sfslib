@@ -105,19 +105,35 @@ class SFSAPIError implements Iterator
 	 */
 	protected $errors = array();
 
+	/**
+	 * Constructor
+	 * @param integer $code - The compiled error code returned from the API.
+	 * @return void
+	 */
 	public function __construct($code = false)
 	{
 		if($code !== false)
 			$this->setAPIErrorCode($code);
 	}
 
+	/**
+	 * Set the compiled error code that was returned from the StopForumSpam API.
+	 * @param integer $code - The error code returned from the API.
+	 * @return SFSAPIError - Provides a fluent interface.
+	 */
 	public function setAPIErrorCode($code)
 	{
 		if(!ctype_digit($code))
 			$this->api_error = 0;
 		$this->api_error = (int) $code;
+
+		return $this;
 	}
 
+	/**
+	 * Extract all errors that were returned from the StopForumSpam API.
+	 * @return SFSAPIError - Provides a fluent interface.
+	 */
 	public function extractErrors()
 	{
 		foreach($this->error_codes as $error)
@@ -128,12 +144,16 @@ class SFSAPIError implements Iterator
 
 		// Check to see if unknown errors are also present.
 		if(($code - self::KNOWN_ERROR_MAX) > 0)
-		{
-			// wat
-			$this->errors[] = self::ERR_WTF;
-		}
+			$this->errors[] = self::ERR_WTF; // wat
+
+		return $this;
 	}
 
+	/**
+	 * Get an error's description
+	 * @param integer $error - The constant for the error code we are looking up.
+	 * @return string - The error code description.
+	 */
 	public function getDescription($error)
 	{
 		if(!isset($this->descriptions[(int) $error]))
@@ -141,16 +161,75 @@ class SFSAPIError implements Iterator
 		return $this->descriptions[(int) $error];
 	}
 
-	public function getErrorsFound()
+	/**
+	 * Get the array of errors
+	 * @return array - Array of errors extracted.
+	 */
+	public function getErrors()
 	{
-		// asdf
+		return (array) $this->errors;
 	}
 
+	/**
+	 * Check to see if a specific error was returned from the StopForumSpam API.
+	 * @param integer $error - The error to check for.
+	 * @return boolean - Was the error encountered?
+	 */
 	public function checkError($error)
 	{
-		// check to see if a certain error was encountered
-		// asdf
+		// If no error code at all, and no errors, return false to save time.
+		if($this->api_error === 0 && empty($this->errors))
+			return false;
+
+		return in_array((int) $error, $this->errors);
 	}
 
-	// @todo iterator methods
+	/**
+	 * Iterator methods
+	 */
+
+	/**
+	 * Iterator method, rewinds the array back to the first element.
+	 * @return void
+	 */
+	public function rewind()
+	{
+		return reset($this->errors);
+	}
+
+	/**
+	 * Iterator method, returns the key of the current element
+	 * @return scalar - The key of the current element.
+	 */
+	public function key()
+	{
+		return key($this->errors);
+	}
+
+	/**
+	 * Iterator method, checks to see if the current position is valid.
+	 * @return boolean - Whether or not the current array position is valid.
+	 */
+	public function valid()
+	{
+		return (!is_null(key($this->errors)));
+	}
+
+	/**
+	 * Iterator method, gets the current element
+	 * @return mixed - The current array element.
+	 */
+	public function current()
+	{
+		return current($this->errors);
+	}
+
+	/**
+	 * Iterator method, moves to the next session available.
+	 * @return void
+	 */
+	public function next()
+	{
+		next($this->errors);
+	}
 }
