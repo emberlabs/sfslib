@@ -23,17 +23,24 @@
  * StopForumSpam integration library should be prepared for use
  * within your own code.
  *
- * This code should be used by PHP 5.2.3+ users, or users running PHP 5.3+ and
- * do not wish to use the PHAR archive.
+ * PHP 5.3+ users can use this code instead of Example.php for loading
+ * the entire StopForumSpam integration library.  The phar archive contains
+ * all classes used by the library, and removes the need for our
+ * autoloader to be registered.
  *
- * - Define the required root include path for the autoloader
- * - Require the main file
- * - Register our autoloader
+ *##############################################################################
+ *##############################################################################
+ *
+ * WARNING:
+ *      DO NOT USE THIS EXAMPLE IF YOU ARE NOT RUNNING PHP 5.3.0 OR NEWER.
+ *
+ *##############################################################################
+ *##############################################################################
+ *
+ * - Require our phar archive
  * - Instantiate the main object
  */
-define('SFSLIB', dirname(__FILE__) . '/src/');
-require SFSLIB . 'SFS.php';
-spl_autoload_register('SFS::loader');
+require dirname(__FILE__) . '/sfslib.phar';
 $sfs = new SFS();
 
 //###############################################################################
