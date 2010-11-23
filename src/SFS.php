@@ -113,9 +113,10 @@ class SFS
 	 */
 	public static function loader($class)
 	{
-		if(file_exists(SFSLIB . basename($class) . '.php'))
+		$path = (defined('SFSLIB_PHAR')) ? SFSLIB_PHAR : SFSLIB;
+		if(file_exists($path . basename($class) . '.php'))
 		{
-			require SFSLIB . basename($class) . '.php';
+			require $path . basename($class) . '.php';
 			if(!class_exists($class, false))
 				throw new Exception(sprintf('SFS Integration Library Autoloader failed to load correct class file for class "%1$s"', $class));
 			return true;
