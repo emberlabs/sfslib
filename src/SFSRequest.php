@@ -57,7 +57,7 @@ class SFSRequest extends SFSTransmission
 
 	/**
 	 * Sends the StopForumSpam API _GET request, based on the chunks of information we are looking for.
-	 * @return SFSResult - The results of the lookup.
+	 * @return SFSRequestResult - The results of the lookup.
 	 *
 	 * @throws SFSRequestException
 	 *
@@ -137,6 +137,6 @@ class SFSRequest extends SFSTransmission
 		// Pass the requested data to the SFSResult object instantiation, so we know what we requested.
 		$requested_data = array('username' => $this->username, 'email' => $this->email, 'ip' => $this->ip);
 
-		return new SFSResult($this->sfs, $data, $requested_data);
+		return new SFSRequestResult($this->sfs, $data, $requested_data);
 	}
 }
