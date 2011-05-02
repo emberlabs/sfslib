@@ -117,7 +117,7 @@ class Manager
 		$commit = \Codebite\StopForumSpam\Core::getCommit();
 		if($commit != '')
 		{
-			return sprintf('PHP-SFSIntegration:%1$s-%2$s;PHP:%3$s', $version, $commit, PHP_VERSION);
+			return sprintf('PHP-SFSIntegration:%1$s;phar:%2$s;PHP:%3$s', $version, $commit, PHP_VERSION);
 		}
 		else
 		{
