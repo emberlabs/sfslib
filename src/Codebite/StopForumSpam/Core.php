@@ -44,6 +44,11 @@ class Core
 	private static $version = '0.4.0-dev';
 
 	/**
+	 * @var string - The commit ID for phar-packaged forms of the framework (considering "unstable" development builds)
+	 */
+	private static $commit;
+
+	/**
 	 * @var array - Array of settings we have loaded and stored
 	 */
 	protected static $config = array();
@@ -76,6 +81,20 @@ class Core
 	public static function getVersion()
 	{
 		return self::$version;
+	}
+
+	/**
+	 * Get the commit ID (if there is one known) for this packaging of the framework
+	 * @return string - The commit ID of the framework package, or an empty string if no commit ID could be determined
+	 */
+	public static function getCommit()
+	{
+		if(self::$commit === NULL)
+		{
+			self::$commit = file_exists(\Codebite\StopForumSpam\ROOT_PATH . '/COMMIT_ID') ? file_get_contents(\Codebite\StopForumSpam\ROOT_PATH) : '';
+		}
+
+		return self::$commit;
 	}
 
 	/**

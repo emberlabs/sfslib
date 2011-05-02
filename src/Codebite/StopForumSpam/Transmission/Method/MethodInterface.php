@@ -18,21 +18,21 @@
  *
  */
 
-namespace Codebite\StopForumSpam\Cache;
+namespace Codebite\StopForumSpam\Transmission\Method;
 use \Codebite\StopForumSpam\Core;
 
 if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
 
 /**
- * StopForumSpam Integration - Cache interface
- * 	     Provides an interface used for integrating in a caching system when looking up/reporting data to and from StopForumSpam.
+ * StopForumSpam Integration - Transmission method interface
+ * 	     Provides an interface used for defining a transmitter for when communicating with StopForumSpam.
  *
  * @package     sfsintegration
  * @author      Damian Bushong
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/damianb/SFSIntegration
  */
-interface CacheInterface
+interface MethodInterface
 {
 	// asdf
 }

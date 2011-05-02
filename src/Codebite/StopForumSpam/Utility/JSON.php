@@ -18,7 +18,7 @@
  *
  */
 
-namespace Codebite\StopForumSpam;
+namespace Codebite\StopForumSpam\Utility;
 use Codebite\StopForumSpam\Core;
 
 if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
