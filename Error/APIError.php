@@ -1,0 +1,21 @@
+SFS_MAINT_MODE => maintenance mode record processing deferred
+SFS_ADD_DUPLICATE => duplicate record from your apikey
+SFS_ADD_INVALID_APIKEY => could not validate api key
+SFS_ADD_SANITY => you cannot submit your own email address
+SFS_ADD_MYSQL_ERROR => database error deferred processing failed
+SFS_FORMAT_ERROR => serialized data invalid
+
+DEFINE ('SFS_ADD_NO_ERROR', 0);
+DEFINE ('SFS_ADD_INVALID_EMAIL', 1);
+DEFINE ('SFS_ADD_INVALID_IP', 2);
+DEFINE ('SFS_ADD_INVALID_USER', 4);
+DEFINE ('SFS_ADD_INVALID_APIKEY', 8);
+DEFINE ('SFS_ADD_INVALID_SELF_EMAIL', 16);
+DEFINE ('SFS_ADD_INVALID_SELF_IP', 32);
+DEFINE ('SFS_ADD_MYSQL_ERROR', 64);
+DEFINE ('SFS_ADD_MYSQL_ERROR_SC', 128);
+DEFINE ('SFS_ADD_NOSQL_INSERT_ERROR', 256);
+DEFINE ('SFS_ADD_DUPLICATE', 512);
+DEFINE ('SFS_ADD_SANITY', 1024);
+DEFINE ('SFS_ADD_FIELD_ERROR', 32768);
+DEFINE ('SFS_MAINT_MODE', 65536);
