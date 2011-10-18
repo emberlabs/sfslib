@@ -35,9 +35,27 @@ if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
  */
 class cURL implements TransmitterInterface
 {
+	public function __construct()
+	{
+		if(!function_exists('curl_init'))
+		{
+			throw new \Exception(); // @todo exception - curl not supported on server
+		}
+	}
+	
 	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
-		// asdf
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $transmission->buildURL() . '&useragent=' . rawurlencode(Core::getUserAgent()));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_TIMEOUT, Core::getConfig('sfs.timeout'));
+		curl_setopt($curl, CURLOPT_USERAGENT, $this->buildUserAgent());
+		$json = curl_exec($curl);
+		if(curl_errno($curl))
+		{
+			throw new \Exception('cURL error: ' . curl_error($curl), curl_errno($curl)); // @todo exception - replace exception class with appropriate class
+		}
+		curl_close($curl);
 
 		return $transmission->newResponse($json);
 	}

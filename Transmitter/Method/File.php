@@ -44,7 +44,7 @@ class File implements TransmitterInterface
 			),
 		));
 
-		$json = @file_get_contents($transmission->buildURL() . '&useragent=' . urlencode(Core::getUserAgent()), false, $stream);
+		$json = @file_get_contents($transmission->buildURL() . '&useragent=' . rawurlencode(Core::getUserAgent()), false, $stream);
 
 		return $transmission->newResponse($json);
 	}
