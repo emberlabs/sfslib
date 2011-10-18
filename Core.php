@@ -24,73 +24,55 @@ namespace emberlabs\sfslib;
  * StopForumSpam Integration - Manager object
  * 	     Provides quick and easy access to the library's functionality.
  *
- * @package     sfsintegration
+ * @package     sfslib
  * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class Core extends \OpenFlame\Framework\Core
+abstract class Core extends \OpenFlame\Framework\Core
 {
 	const LIB_VERSION = '0.5.0-dev';
 
-	protected static $instance;
+	protected static $transmitter;
 
-	protected $timeout = 30;
+	protected static $transmitters = array();
 
-	protected $transmitter;
-
-	final public static function getInstance()
+	public static function declareTransmitter()
 	{
-		if(!static::$instance)
+		if(!is_callable($class, true))
 		{
-			static::$instance = new static();
+			throw new \Exception(); // @todo exception - invalid transmitter callback specified
+		}
+		self::$transmitters[$name] = $class;
+	}
+
+	public static function getTransmitter()
+	{
+		if(self::$transmitter !== NULL)
+		{
+			return self::$transmitter;
 		}
 
-		return static::$instance;
-	}
-
-	final protected function __construct()
-	{
-		// set default options...
-		$defaults = array(
-			'sfs.timeout'				=> 30,
-			'sfs.transmitter'			=> 'file',
-			'sfs.transmitterclass.file'	=> '\\emberlabs\\sfslib\\Transmitter\\File',
-			'sfs.transmitterclass.curl'	=> '\\emberlabs\\sfslib\\Transmitter\\cURL',
-		);
-
-		foreach($configs as $name => $config)
+		if(!isset(self::$transmitters[self::getConfig('sfs.transmitter')]))
 		{
-			if(self::getConfig($name) === NULL)
-			{
-				self::setConfig($name, $config);
-			}
+			throw new \Exception(); // @todo exception - invalid transmitter specified
 		}
 
+		$class = self::$transmitters[self::getConfig('sfs.transmitter')];
+		$transmitter = new $class();
+
+		if(!$transmitter instanceof \emberlabs\sfslib\Transmission\TransmitterInterface)
+		{
+			throw new \Exception();
+		}
+
+		self::$transmitter = $transmitter;
+
+		return $transmitter;
 	}
 
-	public function declareTransmitter()
-	{
-		// asdf
-	}
-
-	public function getTransmitter()
-	{
-		// asdf
-	}
-
-	public function getUserAgent()
+	public static function getUserAgent()
 	{
 		return sprintf('emberlabs.sfslib:%1$s;PHP:%2$s', self::LIB_VERSION, PHP_VERSION);
-	}
-
-	public function newRequest($username, $email, $ip)
-	{
-		// asdf
-	}
-
-	public function newReport($username, $email, $ip)
-	{
-		// asdf
 	}
 }

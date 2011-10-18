@@ -5,11 +5,11 @@
  *
  *  StopForumSpam integration library
  *-------------------------------------------------------------------
- * @package     sfsintegration
- * @author      Damian Bushong
+ * @package     sfslib
+ * @author      emberlabs.org
  * @copyright   (c) 2010 - 2011 Damian Bushong
  * @license     MIT License
- * @link        https://github.com/damianb/SFSIntegration
+ * @link        https://github.com/emberlabs/sfslib
  *
  *===================================================================
  *
@@ -18,21 +18,25 @@
  *
  */
 
-namespace Codebite\StopForumSpam\Transmission\Method;
-use \Codebite\StopForumSpam\Core;
+namespace emberlabs\sfslib\Transmitter;
 
 if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
 
 /**
- * StopForumSpam Integration - Transmission method interface
+ * StopForumSpam integration library - Transmitter interface
  * 	     Provides an interface used for defining a transmitter for when communicating with StopForumSpam.
  *
- * @package     sfsintegration
- * @author      Damian Bushong
+ * @package     sfslib
+ * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
- * @link        https://github.com/damianb/SFSIntegration
+ * @link        https://github.com/emberlabs/sfslib
  */
-interface MethodInterface
+interface TransmitterInterface
 {
-	// asdf
+	/**
+	 * Send a transmission to StopForumSpam
+	 * @param \emberlabs\sfslib\Transmission\TrasmissionInstanceInterface $transmission - The transmission to send
+	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
+	 */
+	function send(\emberlabs\sfslib\Transmission\TrasmissionInstanceInterface $transmission);
 }
