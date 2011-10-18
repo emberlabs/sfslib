@@ -3,9 +3,13 @@
 This library provides easy integration with the StopForumSpam lookup database, for easy integration in your own applications.
 Please note that the library is not intended to be used as a firewall, and that the StopForumSpam service requests that no more than 10000 API queries per day be used.
 
-**Copyright**: *(c) 2010 - 2011 Damian Bushong*
+## copyright
 
-**License**: *MIT License*
+(c) 2010 - 2011 emberlabs.org
+
+## license
+
+This library is licensed under the MIT license; you can find a full copy of the license itself in the file /LICENSE
 
 ## Requirements
 
@@ -21,24 +25,10 @@ This library is being rewritten and is not currently stable enough for productio
 
 Via Linux, or git bash in msysgit for Windows
 
-	git clone http://github.com/damianb/SFSIntegration.git
-	cd ./SFSIntegration
+	git clone https://github.com/emberlabs/sfslib.git
+	cd ./sfslib
 
 This will download the StopForumSpam integration library.
-
-Optionally, you may verify the phar archive if you have the phar-util package installed via PEAR.
-
-### Compiling an updated PHAR package
-
-Install the phar-util package <http://github.com/koto/phar-util> via PEAR, if you have not done so already
-    $ sudo pear channel-discover pear.kotowicz.net
-    $ sudo pear install kotowicz/PharUtil-beta
-
-Make changes to the files in the **src/** directory, then build the package (without signing it)
-    $ ./build/unsigned-build.sh
-
-Using the compile-on-commit script (without signing it)
-    $ cp build/hooks/autobuild-unsigned .git/hooks/pre-commit
 
 ### Notes
 
