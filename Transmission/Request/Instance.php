@@ -19,7 +19,10 @@
  */
 
 namespace emberlabs\sfslib\Transmission\Request;
-use \Codebite\StopForumSpam\Error\InternalException;
+use \emberlabs\sfslib\Error\APIError;
+use \emberlabs\sfslib\Internal\RequestException;
+use \emberlabs\sfslib\Transmission\Request\Response as RequestResponse;
+use \InvalidArgumentException;
 
 /**
  * StopForumSpam integration library - Request Instance object
@@ -122,19 +125,18 @@ class Instance
 	 * @var string $username - The username to check.
 	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluid interface.
 	 *
-	 * @throws
+	 * @throws RequestException
 	 */
 	public function setUsername($username)
 	{
 		if($this->num_datapoints >= 15)
 		{
-			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
-			return $this;
+			throw new RequestException('Maximum number of data points to query reached for request instance');
 		}
 
-		if($this->result !== NULL)
+		if($this->response !== NULL)
 		{
-			throw new \Exception(); // @todo exception
+			throw new RequestException('Cannot modify a request already sent');
 		}
 
 		$this->username[] = $username;
@@ -148,24 +150,24 @@ class Instance
 	 * @var string $email - The email address to check.
 	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluid interface.
 	 *
-	 * @throws
+	 * @throws RequestException
+	 * @throws InvalidArgumentException
 	 */
 	public function setEmail($email)
 	{
 		if($this->num_datapoints >= 15)
 		{
-			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
-			return $this;
+			throw new RequestException('Maximum number of data points to query reached for request instance');
 		}
 
-		if($this->result !== NULL)
+		if($this->response !== NULL)
 		{
-			throw new \Exception(); // @todo exception
+			throw new RequestException('Cannot modify a request already sent');
 		}
 
 		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
 		{
-			throw new InternalException('Invalid email address supplied'); // @todo exception
+			throw new InvalidArgumentException('Invalid email address supplied');
 		}
 
 		$this->email[] = $email;
@@ -179,19 +181,19 @@ class Instance
 	 * @var string $ip - The IP to check.
 	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluid interface.
 	 *
-	 * @throws
+	 * @throws RequestException
+	 * @throws InvalidArgumentException
 	 */
 	public function setIP($ip)
 	{
 		if($this->num_datapoints >= 15)
 		{
-			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
-			return $this;
+			throw new RequestException('Maximum number of data points to query reached for request instance');
 		}
 
-		if($this->result !== NULL)
+		if($this->response !== NULL)
 		{
-			throw new \Exception(); // @todo exception
+			throw new RequestException('Cannot modify a request already sent');
 		}
 
 		/**
@@ -210,7 +212,7 @@ class Instance
 		 */
 		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 & FILTER_FLAG_IPV6 & FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) === false)
 		{
-			throw new InternalException('Invalid IP address supplied'); // @todo exception
+			throw new InvalidArgumentException('Invalid IP address supplied');
 		}
 
 		$this->ip[] = $ip;
@@ -219,24 +221,38 @@ class Instance
 		return $this;
 	}
 
+	/**
+	 * Get the response object linked to this query
+	 * @return RequestResponse|APIError|NULL - The response object, the error object for the error(s) received from the API, or NULL if request not yet sent.
+	 */
 	public function getResponse()
 	{
-		return $this->result;
+		return $this->response;
 	}
 
+	/**
+	 * Generate a new response object based on the data received from StopForumSpam in response to this query.
+	 * @param string $json - The JSON data received in response from StopForumSpam.
+	 * @return RequestResponse|APIError - The request response object, or the API error object created from our query data results
+	 *
+	 * @throws RequestException
+	 */
 	public function newResponse($json)
 	{
-		if($this->result !== NULL)
+		if($this->response !== NULL)
 		{
-			throw new \Exception(); // @todo exception
+			throw new RequestException('Request response already generated, use getResponse() to reobtain it');
 		}
 
-		$this->result = new \emberlabs\sfslib\Transmission\Request\Result($this, $json);
-		return $this->result;
+		$this->response = RequestResponse::getResponse($this, $json);
+		return $this->response;
 	}
 
+	/**
+	 * @ignore
+	 */
 	public function __destruct()
 	{
-		$this->result = NULL;
+		$this->response = NULL;
 	}
 }
