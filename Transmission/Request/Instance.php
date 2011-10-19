@@ -5,11 +5,11 @@
  *
  *  StopForumSpam integration library
  *-------------------------------------------------------------------
- * @package     sfsintegration
- * @author      Damian Bushong
+ * @package     sfslib
+ * @author      emberlabs.org
  * @copyright   (c) 2010 - 2011 Damian Bushong
  * @license     MIT License
- * @link        https://github.com/damianb/SFSIntegration
+ * @link        https://github.com/emberlabs/sfslib
  *
  *===================================================================
  *
@@ -18,11 +18,8 @@
  *
  */
 
-namespace Codebite\StopForumSpam\Request;
-use \Codebite\StopForumSpam\Core;
+namespace emberlabs\sfslib\Transmission\Request;
 use \Codebite\StopForumSpam\Error\InternalException;
-
-if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
 
 /**
  * StopForumSpam Integration - Request Instance object
@@ -35,38 +32,83 @@ if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
  */
 class Instance
 {
+	protected $username = array();
 
-	/**
-	 * @const - Constant defining what API response serialization method we are using here.
-	 */
-	const API_METHOD = 'json';
+	protected $email = array();
 
-	/**
-	 * @const - Constant defining the base URL of the StopForumSpam API.
-	 */
-	const API_URL = 'http://www.stopforumspam.com/api';
+	protected $ip = array();
 
-	protected $username;
+	protected $num_datapoints = 0;
 
-	protected $email;
+	protected $locked = false;
 
-	protected $ip;
-
-	public function newRequest()
+	public static function newInstance()
 	{
-		$self = new static();
+		return new self();
+	}
 
-		return $self;
+	public function buildURL()
+	{
+		$username = $email = $ip = '';
+		if(!empty($this->username))
+		{
+			$this->username = array_map('rawurlencode', $this->username);
+			if(count($this->username) > 1)
+			{
+				$username .= 'username[]=' . implode('&username[]=', $this->username);
+			}
+			else
+			{
+				$username .= 'username=' . reset($this->username);
+			}
+		}
+
+		if(!empty($this->email))
+		{
+			$this->email = array_map('rawurlencode', $this->email);
+			if(count($this->email) > 1)
+			{
+				$email .= 'email[]=' . implode('&email[]=', $this->email);
+			}
+			else
+			{
+				$email .= 'email=' . reset($this->email);
+			}
+		}
+
+		if(!empty($this->ip))
+		{
+			$this->ip = array_map('rawurlencode', $this->ip);
+			if(count($this->ip) > 1)
+			{
+				$ip .= 'ip[]=' . implode('&ip[]=', $this->ip);
+			}
+			else
+			{
+				$ip .= 'ip=' . reset($this->ip);
+			}
+		}
+
+		$url = implode('&', array($username, $email, $ip));
+
+		return $url;
 	}
 
 	/**
 	 * Sets the username that we are transmitting.
 	 * @var string $username - The username to check.
-	 * @return \Codebite\StopForumSpam\Request\Instance - Provides a fluid interface.
+	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluid interface.
 	 */
 	public function setUsername($username)
 	{
-		$this->username = $username;
+		if($this->num_datapoints >= 15)
+		{
+			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
+			return $this;
+		}
+
+		$this->username[] = $username;
+		$this->num_datapoints++;
 
 		return $this;
 	}
@@ -74,18 +116,25 @@ class Instance
 	/**
 	 * Sets the email that we are transmitting.
 	 * @var string $email - The email address to check.
-	 * @return \Codebite\StopForumSpam\Request\Instance - Provides a fluid interface.
+	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluid interface.
 	 *
-	 * @throws \Codebite\StopForumSpam\InternalException
+	 * @throws
 	 */
 	public function setEmail($email)
 	{
-		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
+		if($this->num_datapoints >= 15)
 		{
-			throw new InternalException('Invalid email address supplied');
+			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
+			return $this;
 		}
 
-		$this->email = $email;
+		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
+		{
+			throw new InternalException('Invalid email address supplied'); // @todo exception
+		}
+
+		$this->email[] = $email;
+		$this->num_datapoints++;
 
 		return $this;
 	}
@@ -93,14 +142,20 @@ class Instance
 	/**
 	 * Sets the IP that we are transmitting.
 	 * @var string $ip - The IP to check.
-	 * @return \Codebite\StopForumSpam\Request\Instance - Provides a fluid interface.
+	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluid interface.
 	 *
-	 * @throws \Codebite\StopForumSpam\InternalException
+	 * @throws
 	 */
 	public function setIP($ip)
 	{
+		if($this->num_datapoints >= 15)
+		{
+			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
+			return $this;
+		}
+
 		/**
-		 * Validation will check for IPv4 only, and no reserved or private IP ranges
+		 * Validation will check for reserved or private IP ranges
 		 *
 		 * Validation will fail on the following IP ranges:
 		 * 0.0.0.0/8
@@ -110,14 +165,22 @@ class Instance
 		 * 192.0.2.0/24
 		 * 192.168.0.0/16
 		 * 224.0.0.0/4
+		 * FC* (IPv6)
+		 * FD* (IPv6)
 		 */
-		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 & FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) === false)
+		if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 & FILTER_FLAG_IPV6 & FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE) === false)
 		{
-			throw new InternalException('Invalid IP address supplied');
+			throw new InternalException('Invalid IP address supplied'); // @todo exception
 		}
 
-		$this->ip = $ip;
+		$this->ip[] = $ip;
+		$this->num_datapoints++;
 
 		return $this;
+	}
+
+	public function newResponse($json)
+	{
+		return new \emberlabs\sfslib\Transmission\Request\Result($this, $json);
 	}
 }
