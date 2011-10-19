@@ -7,7 +7,7 @@
  *-------------------------------------------------------------------
  * @package     sfslib
  * @author      emberlabs.org
- * @copyright   (c) 2010 - 2011 Damian Bushong
+ * @copyright   (c) 2010 - 2011 emberlabs.org
  * @license     MIT License
  * @link        https://github.com/emberlabs/sfslib
  *
@@ -22,8 +22,8 @@ namespace emberlabs\sfslib\Transmission\Request;
 use \Codebite\StopForumSpam\Error\InternalException;
 
 /**
- * StopForumSpam Integration - Request Instance object
- * 	     Represents the request to be made of the StopForumSpam API..
+ * StopForumSpam integration library - Request Instance object
+ * 	     Represents the request to be made of the StopForumSpam API.
  *
  * @package     sfsintegration
  * @author      Damian Bushong
@@ -32,21 +32,44 @@ use \Codebite\StopForumSpam\Error\InternalException;
  */
 class Instance
 {
+	/**
+	 * @var array - Array of usernames to check against StopForumSpam
+	 */
 	protected $username = array();
 
+	/**
+	 * @var array - Array of email addresses to check against StopForumSpam
+	 */
 	protected $email = array();
 
+	/**
+	 * @var array - Array of IP addresses to check against StopForumSpam
+	 */
 	protected $ip = array();
 
+	/**
+	 * @var integer - The number of data points currently to be queried.
+	 */
 	protected $num_datapoints = 0;
 
-	protected $locked = false;
+	/**
+	 * @var \emberlabs\sfslib\Transmission\Request\Result - The result object.
+	 */
+	protected $result;
 
+	/**
+	 * Obtain a new instance of this object
+	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluent interface.
+	 */
 	public static function newInstance()
 	{
 		return new self();
 	}
 
+	/**
+	 * Build the URL params to query StopForumSpam with.
+	 * @return string - The URL param string to use.
+	 */
 	public function buildURL()
 	{
 		$username = $email = $ip = '';
@@ -98,6 +121,8 @@ class Instance
 	 * Sets the username that we are transmitting.
 	 * @var string $username - The username to check.
 	 * @return \emberlabs\sfslib\Transmission\Request\Instance - Provides a fluid interface.
+	 *
+	 * @throws
 	 */
 	public function setUsername($username)
 	{
@@ -105,6 +130,11 @@ class Instance
 		{
 			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
 			return $this;
+		}
+
+		if($this->result !== NULL)
+		{
+			throw new \Exception(); // @todo exception
 		}
 
 		$this->username[] = $username;
@@ -126,6 +156,11 @@ class Instance
 		{
 			trigger_error('Maximum number of data points to query reached for request instance', E_USER_WARNING);
 			return $this;
+		}
+
+		if($this->result !== NULL)
+		{
+			throw new \Exception(); // @todo exception
 		}
 
 		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
@@ -154,6 +189,11 @@ class Instance
 			return $this;
 		}
 
+		if($this->result !== NULL)
+		{
+			throw new \Exception(); // @todo exception
+		}
+
 		/**
 		 * Validation will check for reserved or private IP ranges
 		 *
@@ -179,8 +219,24 @@ class Instance
 		return $this;
 	}
 
+	public function getResponse()
+	{
+		return $this->result;
+	}
+
 	public function newResponse($json)
 	{
-		return new \emberlabs\sfslib\Transmission\Request\Result($this, $json);
+		if($this->result !== NULL)
+		{
+			throw new \Exception(); // @todo exception
+		}
+
+		$this->result = new \emberlabs\sfslib\Transmission\Request\Result($this, $json);
+		return $this->result;
+	}
+
+	public function __destruct()
+	{
+		$this->result = NULL;
 	}
 }
