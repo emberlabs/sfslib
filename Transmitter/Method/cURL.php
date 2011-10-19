@@ -22,8 +22,6 @@ namespace emberlabs\sfslib\Transmitter;
 use \emberlabs\sfslib\Core;
 use \OpenFlame\Framework\Utility\JSON;
 
-if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
-
 /**
  * StopForumSpam integration library - Transmitter object
  * 	     Provides functionality to communicate with StopForumSpam.

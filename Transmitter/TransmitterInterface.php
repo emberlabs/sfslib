@@ -20,8 +20,6 @@
 
 namespace emberlabs\sfslib\Transmitter;
 
-if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
-
 /**
  * StopForumSpam integration library - Transmitter interface
  * 	     Provides an interface used for defining a transmitter for when communicating with StopForumSpam.
