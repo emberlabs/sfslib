@@ -5,11 +5,11 @@
  *
  *  StopForumSpam integration library
  *-------------------------------------------------------------------
- * @package     sfsintegration
- * @author      Damian Bushong
- * @copyright   (c) 2010 - 2011 Damian Bushong
+ * @package     sfslib
+ * @author      emberlabs.org
+ * @copyright   (c) 2010 - 2011 emberlabs.org
  * @license     MIT License
- * @link        https://github.com/damianb/SFSIntegration
+ * @link        https://github.com/emberlabs/sfslib
  *
  *===================================================================
  *
@@ -18,18 +18,15 @@
  *
  */
 
-namespace Codebite\StopForumSpam\Error;
-use \Codebite\StopForumSpam\Core;
-
-if(!defined('Codebite\\StopForumSpam\\ROOT_PATH')) exit;
+namespace emberlabs\sfslib\Internal;
 
 /**
- * StopForumSpam Integration - Internal Exception class,
+ * StopForumSpam integration library - Internal Exception class,
  * 	     used when something goes asplodie internally.
  *
- * @package     sfsintegration
- * @author      Damian Bushong
+ * @package     sfslib
+ * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
- * @link        https://github.com/damianb/SFSIntegration
+ * @link        https://github.com/emberlabs/sfslib
  */
 class InternalException extends \Exception { }

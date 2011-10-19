@@ -7,7 +7,7 @@
  *-------------------------------------------------------------------
  * @package     sfslib
  * @author      emberlabs.org
- * @copyright   (c) 2010 - 2011 Damian Bushong
+ * @copyright   (c) 2010 - 2011 emberlabs.org
  * @license     MIT License
  * @link        https://github.com/emberlabs/sfslib
  *
@@ -21,6 +21,7 @@
 namespace emberlabs\sfslib\Transmitter;
 use \emberlabs\sfslib\Core;
 use \OpenFlame\Framework\Utility\JSON;
+use \emberlabs\sfslib\Internal\cURLException;
 
 /**
  * StopForumSpam integration library - Transmitter object
@@ -37,10 +38,10 @@ class cURL implements TransmitterInterface
 	{
 		if(!function_exists('curl_init'))
 		{
-			throw new \Exception(); // @todo exception - curl not supported on server
+			throw new cURLException('cURL not supported by current server configuration');
 		}
 	}
-	
+
 	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
 		$curl = curl_init();
@@ -51,7 +52,7 @@ class cURL implements TransmitterInterface
 		$json = curl_exec($curl);
 		if(curl_errno($curl))
 		{
-			throw new \Exception('cURL error: ' . curl_error($curl), curl_errno($curl)); // @todo exception - replace exception class with appropriate class
+			throw new cURLException('cURL error: ' . curl_error($curl), curl_errno($curl));
 		}
 		curl_close($curl);
 
