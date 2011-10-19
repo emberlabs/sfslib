@@ -20,15 +20,16 @@
 
 namespace emberlabs\sfslib\Transmission;
 /**
- * StopForumSpam integration library - Transmission result interface
- * 	     Provides a prototype of methods that all transmission results should provide.
+ * StopForumSpam integration library - Transmission response interface
+ * 	     Provides a prototype of methods that all transmission responses should provide.
  *
  * @package     sfslib
  * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-interface TransmissionResultInterface
+interface TransmissionResponseInterface
 {
+	static function getResponse(TransmissionInstanceInterface $transmission, $json);
 	function isError();
 }
