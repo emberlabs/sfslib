@@ -7,7 +7,7 @@
  *-------------------------------------------------------------------
  * @package     sfslib
  * @author      emberlabs.org
- * @copyright   (c) 2010 - 2011 Damian Bushong
+ * @copyright   (c) 2010 - 2011 emberlabs.org
  * @license     MIT License
  * @link        https://github.com/emberlabs/sfslib
  *
@@ -21,7 +21,7 @@
 namespace emberlabs\sfslib;
 
 /**
- * StopForumSpam Integration - Manager object
+ * StopForumSpam integration library - Manager object
  * 	     Provides quick and easy access to the library's functionality.
  *
  * @package     sfslib
