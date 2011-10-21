@@ -19,6 +19,7 @@
  */
 
 namespace emberlabs\sfslib\Transmission\Request;
+use \emberlabs\sfslib\Core;
 use \emberlabs\sfslib\Error\APIError;
 use \emberlabs\sfslib\Internal\RequestException;
 use \emberlabs\sfslib\Transmission\Request\Response as RequestResponse;
@@ -28,13 +29,15 @@ use \InvalidArgumentException;
  * StopForumSpam integration library - Request Instance object
  * 	     Represents the request to be made of the StopForumSpam API.
  *
- * @package     sfsintegration
- * @author      Damian Bushong
+ * @package     sfslib
+ * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
- * @link        https://github.com/damianb/SFSIntegration
+ * @link        https://github.com/emberlabs/sfslib
  */
-class Instance
+class Instance implements \emberlabs\sfslib\Transmission\TransmissionInstanceInterface
 {
+	const API_URL = 'http://www.stopforumspam.com/api';
+
 	/**
 	 * @var array - Array of usernames to check against StopForumSpam
 	 */
@@ -79,43 +82,24 @@ class Instance
 		if(!empty($this->username))
 		{
 			$this->username = array_map('rawurlencode', $this->username);
-			if(count($this->username) > 1)
-			{
-				$username .= 'username[]=' . implode('&username[]=', $this->username);
-			}
-			else
-			{
-				$username .= 'username=' . reset($this->username);
-			}
+			$username .= 'username[]=' . implode('&username[]=', $this->username);
 		}
 
 		if(!empty($this->email))
 		{
 			$this->email = array_map('rawurlencode', $this->email);
-			if(count($this->email) > 1)
-			{
-				$email .= 'email[]=' . implode('&email[]=', $this->email);
-			}
-			else
-			{
-				$email .= 'email=' . reset($this->email);
-			}
+			$email .= 'email[]=' . implode('&email[]=', $this->email);
 		}
 
 		if(!empty($this->ip))
 		{
 			$this->ip = array_map('rawurlencode', $this->ip);
-			if(count($this->ip) > 1)
-			{
-				$ip .= 'ip[]=' . implode('&ip[]=', $this->ip);
-			}
-			else
-			{
-				$ip .= 'ip=' . reset($this->ip);
-			}
+			$ip .= 'ip[]=' . implode('&ip[]=', $this->ip);
 		}
 
-		$url = implode('&', array($username, $email, $ip));
+		// Allow the API URL to be overridden if we need to, but if we don't want to, fall back to the default URL.
+		$url =  Core::getConfig('sfs.api_url') ?: self::API_URL;
+		$url .= '?' . implode('&', array($username, $email, $ip)) . '&f=json';
 
 		return $url;
 	}
@@ -246,6 +230,17 @@ class Instance
 
 		$this->response = RequestResponse::getResponse($this, $json);
 		return $this->response;
+	}
+
+	/**
+	 * Send the query to the API.
+	 * @return RequestResponse|APIError - The response or error received from the API.
+	 */
+	public function send()
+	{
+		$transmitter = Core::getTransmitter();
+
+		return $transmitter->send($this);
 	}
 
 	/**
