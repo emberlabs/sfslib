@@ -36,16 +36,6 @@ use \InvalidArgumentException;
  */
 class Response implements \emberlabs\sfslib\Transmission\TransmissionResponseInterface
 {
-	/**
-	 * @const string - The date() format for dates returned by the StopForumSpam API.
-	 */
-	const SFS_DATETIME_FORMAT = 'Y-m-d H:i:s';
-
-	/**
-	 * @const string - The PHP DateTimeZone timezone string for the StopForumSpam API.
-	 */
-	const SFS_TIMEZONE = 'Etc/GMT-5';
-
 	protected $data = array();
 
 	public static function getResponse(TransmissionInstanceInterface $transmission, $json)
@@ -85,19 +75,19 @@ class Response implements \emberlabs\sfslib\Transmission\TransmissionResponseInt
 	{
 		foreach($data['username'] as $entry)
 		{
-			$result = new Result($entry);
+			$result = new Result($entry, Result::RESULT_USERNAME);
 			$this->data['username'][$result->getValue()] = $result;
 		}
 
 		foreach($data['email'] as $entry)
 		{
-			$result = new Result($entry);
+			$result = new Result($entry, Result::RESULT_EMAIL);
 			$this->data['email'][$result->getValue()] = $result;
 		}
 
 		foreach($data['ip'] as $entry)
 		{
-			$result = new Result($entry);
+			$result = new Result($entry, Result::RESULT_IP);
 			$this->data['ip'][$result->getValue()] = $result;
 		}
 	}

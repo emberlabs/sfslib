@@ -19,6 +19,7 @@
  */
 
 namespace emberlabs\sfslib;
+use \OpenFlame\Framework\Dependency\Injector;
 
 /**
  * StopForumSpam integration library - Manager object
@@ -31,6 +32,16 @@ namespace emberlabs\sfslib;
  */
 class Library
 {
+	/**
+	 * @const string - The date() format for dates returned by the StopForumSpam API.
+	 */
+	const SFS_DATETIME_FORMAT = 'Y-m-d H:i:s';
+
+	/**
+	 * @const string - The PHP DateTimeZone timezone string for the StopForumSpam API.
+	 */
+	const SFS_TIMEZONE = 'Etc/GMT-5';
+
 	protected static $instance;
 
 	public static function getInstance()
@@ -53,6 +64,14 @@ class Library
 
 		Core::declareTransmitter('file', '\\emberlabs\\sfslib\\Transmitter\\File');
 		Core::declareTransmitter('curl', '\\emberlabs\\sfslib\\Transmitter\\cURL');
+
+		$injector = Injector::getInstance();
+		$injector->setInjector('sfs.timezone', function() {
+			return new \DateTimeZone(self::SFS_TIMEZONE);
+		});
+		$injector->setInjector('sfs.now', function() use($injector) {
+			return new \DateTime('now', $injector->get('sfs.timezone'));
+		});
 
 		foreach($configs as $name => $config)
 		{
