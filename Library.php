@@ -24,7 +24,7 @@ namespace emberlabs\sfslib;
  * StopForumSpam integration library - Manager object
  * 	     Provides quick and easy access to the library's functionality.
  *
- * @package     sfsintegration
+ * @package     sfslib
  * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
