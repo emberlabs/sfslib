@@ -31,5 +31,6 @@ namespace emberlabs\sfslib\Transmission;
 interface TransmissionResponseInterface
 {
 	static function getResponse(TransmissionInstanceInterface $transmission, $json);
+	function __construct(TransmissionInstanceInterface $transmission, $data);
 	function isError();
 }

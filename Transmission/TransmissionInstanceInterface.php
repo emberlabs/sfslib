@@ -36,4 +36,5 @@ interface TransmissionInstanceInterface
 	function setEmail($email);
 	function setIP($ip);
 	function newResponse($json);
+	function send();
 }
