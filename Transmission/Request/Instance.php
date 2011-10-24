@@ -19,9 +19,10 @@
  */
 
 namespace emberlabs\sfslib\Transmission\Request;
-use \emberlabs\sfslib\Error\APIError;
 use \emberlabs\sfslib\Internal\RequestException;
+use \emberlabs\sfslib\Transmission\TransmissionInstanceInterface;
 use \emberlabs\sfslib\Transmission\Request\Response as RequestResponse;
+use \emberlabs\sfslib\Transmission\Request\Error as RequestError;
 use \OpenFlame\Framework\Core;
 use \OpenFlame\Framework\Dependency\Injector;
 use \InvalidArgumentException;
@@ -35,7 +36,7 @@ use \InvalidArgumentException;
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class Instance implements \emberlabs\sfslib\Transmission\TransmissionInstanceInterface
+class Instance implements TransmissionInstanceInterface
 {
 	const API_URL = 'http://www.stopforumspam.com/api';
 
@@ -218,7 +219,7 @@ class Instance implements \emberlabs\sfslib\Transmission\TransmissionInstanceInt
 	/**
 	 * Generate a new response object based on the data received from StopForumSpam in response to this query.
 	 * @param string $json - The JSON data received in response from StopForumSpam.
-	 * @return RequestResponse|APIError - The request response object, or the API error object created from our query data results
+	 * @return RequestResponse|RequestError - The request response object, or the request error object created from our query data results
 	 *
 	 * @throws RequestException
 	 */
@@ -235,7 +236,7 @@ class Instance implements \emberlabs\sfslib\Transmission\TransmissionInstanceInt
 
 	/**
 	 * Send the query to the API.
-	 * @return RequestResponse|APIError - The response or error received from the API.
+	 * @return RequestResponse|RequestError - The response or error received from the API.
 	 */
 	public function send()
 	{
