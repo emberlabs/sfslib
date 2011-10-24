@@ -20,17 +20,18 @@
 
 namespace emberlabs\sfslib\Transmission\Request;
 use \emberlabs\sfslib\Transmission\TransmissionInstanceInterface;
+use \emberlabs\sfslib\Transmission\TransmissionErrorInterface;
 
 /**
- * StopForumSpam integration library - Request response object
- * 	     Represents the response from the StopForumSpam API.
+ * StopForumSpam integration library - Request error object
+ * 	     Represents an error response from the StopForumSpam API.
  *
  * @package     sfslib
  * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class Error implements \emberlabs\sfslib\Transmission\TransmissionErrorInterface
+class Error implements TransmissionErrorInterface
 {
 	protected $errors = array();
 
@@ -53,6 +54,6 @@ class Error implements \emberlabs\sfslib\Transmission\TransmissionErrorInterface
 
 	public function getErrors()
 	{
-		// asdf
+		return $this->errors;
 	}
 }
