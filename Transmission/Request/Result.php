@@ -69,11 +69,10 @@ class Result
 		if($data['appears'])
 		{
 			$this->appears = true;
-			$timezone = $injector->get('sfs.timezone');
 			$now = $injector->get('sfs.now');
 
 			$this->lastseen_string = $data['lastseen'];
-			$this->lastseen_obj = \DateTime::createFromFormat(SFS::SFS_DATETIME_FORMAT, $data['lastseen'], $timezone);
+			$this->lastseen_obj = new DateTime('@' . $data['lastseen']);
 			$this->lastseen_diff = $this->lastseen_obj->diff($now, true);
 		}
 		else

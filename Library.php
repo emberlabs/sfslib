@@ -40,16 +40,6 @@ use \emberlabs\sfslib\Transmission\Report\Error as ReportError;
 class Library
 {
 	/**
-	 * @const string - The date() format for dates returned by the StopForumSpam API.
-	 */
-	const SFS_DATETIME_FORMAT = 'Y-m-d H:i:s';
-
-	/**
-	 * @const string - The PHP DateTimeZone timezone string for the StopForumSpam API.
-	 */
-	const SFS_TIMEZONE = 'Etc/GMT-2';
-
-	/**
 	 * @const string - The version of the library.
 	 */
 	const LIB_VERSION = '0.5.0-dev';
@@ -111,11 +101,8 @@ class Library
 		$injector->setInjector('sfs.transmitter.mock', function() {
 			return new \emberlabs\sfslib\Transmitter\Mock();
 		});
-		$injector->setInjector('sfs.timezone', function() {
-			return new \DateTimeZone(self::SFS_TIMEZONE);
-		});
-		$injector->setInjector('sfs.now', function() use($injector) {
-			return new \DateTime('now', $injector->get('sfs.timezone'));
+		$injector->setInjector('sfs.now', function() {
+			return new \DateTime('now');
 		});
 
 		foreach($configs as $name => $config)

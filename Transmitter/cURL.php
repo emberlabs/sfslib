@@ -44,7 +44,7 @@ class cURL implements TransmitterInterface
 	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
 		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL, $transmission->buildURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()));
+		curl_setopt($curl, CURLOPT_URL, $transmission->buildURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_TIMEOUT, Core::getConfig('sfs.timeout'));
 		curl_setopt($curl, CURLOPT_USERAGENT, $this->buildUserAgent());
