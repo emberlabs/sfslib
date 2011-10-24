@@ -19,6 +19,7 @@
  */
 
 namespace emberlabs\sfslib;
+use \OpenFlame\Framework\Core;
 use \OpenFlame\Framework\Dependency\Injector;
 
 /**
@@ -40,7 +41,12 @@ class Library
 	/**
 	 * @const string - The PHP DateTimeZone timezone string for the StopForumSpam API.
 	 */
-	const SFS_TIMEZONE = 'Etc/GMT-5';
+	const SFS_TIMEZONE = 'Etc/GMT-2';
+
+	/**
+	 * @const string - The version of the library.
+	 */
+	const LIB_VERSION = '0.5.0-dev';
 
 	protected static $instance;
 
@@ -54,6 +60,11 @@ class Library
 		return self::$instance;
 	}
 
+	public static function getUserAgent()
+	{
+		return sprintf('emberlabs.sfslib:%1$s;PHP:%2$s', self::LIB_VERSION, PHP_VERSION);
+	}
+
 	protected function __construct()
 	{
 		// set default options...
@@ -62,10 +73,19 @@ class Library
 			'sfs.transmitter'			=> 'file',
 		);
 
-		Core::declareTransmitter('file', '\\emberlabs\\sfslib\\Transmitter\\File');
-		Core::declareTransmitter('curl', '\\emberlabs\\sfslib\\Transmitter\\cURL');
-
 		$injector = Injector::getInstance();
+		$injector->setInjector('sfs.transmitter', function() {
+			return $injector->get(Core::getConfig('sfs.transmitter'));
+		});
+		$injector->setInjector('sfs.transmitter.curl', function() {
+			return new \emberlabs\sfslib\Transmitter\cURL();
+		});
+		$injector->setInjector('sfs.transmitter.file', function() {
+			return new \emberlabs\sfslib\Transmitter\File();
+		});
+		$injector->setInjector('sfs.transmitter.mock', function() {
+			return new \emberlabs\sfslib\Transmitter\Mock();
+		});
 		$injector->setInjector('sfs.timezone', function() {
 			return new \DateTimeZone(self::SFS_TIMEZONE);
 		});
