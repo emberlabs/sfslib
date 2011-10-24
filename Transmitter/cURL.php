@@ -19,8 +19,7 @@
  */
 
 namespace emberlabs\sfslib\Transmitter;
-use \emberlabs\sfslib\Core;
-use \OpenFlame\Framework\Utility\JSON;
+use \emberlabs\sfslib\Library as SFS;
 use \emberlabs\sfslib\Internal\cURLException;
 
 /**
@@ -45,7 +44,7 @@ class cURL implements TransmitterInterface
 	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
 		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL, $transmission->buildURL() . '&useragent=' . rawurlencode(Core::getUserAgent()));
+		curl_setopt($curl, CURLOPT_URL, $transmission->buildURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_TIMEOUT, Core::getConfig('sfs.timeout'));
 		curl_setopt($curl, CURLOPT_USERAGENT, $this->buildUserAgent());

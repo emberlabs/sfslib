@@ -30,19 +30,22 @@ use \emberlabs\sfslib\Library as SFS;
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class File implements TransmitterInterface
+class Mock implements TransmitterInterface
 {
+	protected $mock_response = '';
+
+	public function setMockResponse($response)
+	{
+		$this->mock_response = (string) $response;
+	}
+
 	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
-		// Set the stream timeout, just in case
-		$stream = stream_context_create(array(
-			'http'	=> array(
-				'timeout'	=> Core::getConfig('sfs.timeout'),
-			),
-		));
+		print_r('url built for request:');
+		print_r($transmission->buildURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()));
+		print_r('mock response:');
+		print_r($this->mock_response);
 
-		$json = @file_get_contents($transmission->buildURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
-
-		return $transmission->newResponse($json);
+		return $transmission->newResponse($this->mock_response);
 	}
 }
