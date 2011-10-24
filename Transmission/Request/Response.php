@@ -22,6 +22,7 @@ namespace emberlabs\sfslib\Transmission\Request;
 use \emberlabs\sfslib\Error\APIError;
 use \emberlabs\sfslib\Internal\RequestException;
 use \emberlabs\sfslib\Transmission\TransmissionInstanceInterface;
+use \emberlabs\sfslib\Transmission\TransmissionResponseInterface;
 use \emberlabs\sfslib\Transmission\Request\Error as RequestError;
 use \OpenFlame\Framework\Core;
 use \OpenFlame\Framework\Utility\JSON;
@@ -36,7 +37,7 @@ use \InvalidArgumentException;
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class Response implements \emberlabs\sfslib\Transmission\TransmissionResponseInterface
+class Response implements TransmissionResponseInterface
 {
 	protected $data = array();
 
@@ -93,5 +94,13 @@ class Response implements \emberlabs\sfslib\Transmission\TransmissionResponseInt
 	public function isError()
 	{
 		return false;
+	}
+
+	/**
+	 * @ignore
+	 */
+	public function __destruct()
+	{
+		$this->data = array();
 	}
 }
