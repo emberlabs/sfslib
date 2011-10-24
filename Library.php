@@ -21,6 +21,12 @@
 namespace emberlabs\sfslib;
 use \OpenFlame\Framework\Core;
 use \OpenFlame\Framework\Dependency\Injector;
+use \emberlabs\sfslib\Transmission\Request\Instance as RequestInstance;
+use \emberlabs\sfslib\Transmission\Request\Response as RequestResponse;
+use \emberlabs\sfslib\Transmission\Request\Error as RequestError;
+use \emberlabs\sfslib\Transmission\Report\Instance as ReportInstance;
+use \emberlabs\sfslib\Transmission\Report\Response as ReportResponse;
+use \emberlabs\sfslib\Transmission\Report\Error as ReportError;
 
 /**
  * StopForumSpam integration library - Manager object
@@ -48,8 +54,20 @@ class Library
 	 */
 	const LIB_VERSION = '0.5.0-dev';
 
+	/**
+	 * @var \emberlabs\sfslib\Library - The singleton instance of this object.
+	 */
 	protected static $instance;
 
+	/**
+	 * @var string - The API key to use with StopForumSpam
+	 */
+	protected $key = '';
+
+	/**
+	 * Get the singleton instance of the Library object.
+	 * @return \emberlabs\sfslib\Library - Returns the singleton instance of this object.
+	 */
 	public static function getInstance()
 	{
 		if(!self::$instance)
@@ -60,11 +78,18 @@ class Library
 		return self::$instance;
 	}
 
+	/**
+	 * Get the user agent string to use for the library.
+	 * @return string - The user agent string to use
+	 */
 	public static function getUserAgent()
 	{
 		return sprintf('emberlabs.sfslib:%1$s;PHP:%2$s', self::LIB_VERSION, PHP_VERSION);
 	}
 
+	/**
+	 * Constructor
+	 */
 	protected function __construct()
 	{
 		// set default options...
@@ -102,22 +127,71 @@ class Library
 		}
 	}
 
-	public function setKey()
+	/**
+	 * Set the API key to use for restricted communications with the StopForumSpam API.
+	 * @param string $key - The API key to use.
+	 * @return \emberlabs\sfslib\Library - Provides a fluent interface.
+	 */
+	public function setKey($key)
 	{
-		// asdf
+		$this->key = (string) $key;
+
+		return $this;
 	}
 
+	/**
+	 * Get the API key in use for restricted communications with the StopForumSpam API.
+	 * @return string - The API key in use.
+	 */
 	public function getKey()
 	{
-		// asdf
+		return $this->key;
 	}
 
-	public function newRequest($username, $email, $ip)
+	/**
+	 * Create a new request for the StopForumSpam API and immediately submit the request.
+	 * @param string $username - The username to query.
+	 * @param string $email - The email to query.
+	 * @param string $ip - The IP to query.
+	 * @return RequestResponse|RequestError - The response received from the StopForumSpam API.
+	 */
+	public function request($username, $email, $ip)
+	{
+		$request = RequestInstance::newInstance()
+			->setUsername($username)
+			->setEmail($email)
+			->setIP($ip);
+
+		// This will NOT return the just-created RequestInstance, instead it will return a RequestError or a RequestResponse object.
+		return $request->send();
+	}
+
+	/**
+	 * Create a new report for the StopForumSpam API and immediately submit the report.
+	 * @param string $username - The username to report.
+	 * @param string $email - The email to report.
+	 * @param string $ip - The IP to report.
+	 * @return ReportResponse|ReportError - The response received from the StopForumSpam API.
+	 */
+	public function report($username, $email, $ip)
 	{
 		// asdf
 	}
 
-	public function newReport($username, $email, $ip)
+	/**
+	 * Create a new request object to query the StopForumSpam API with.
+	 * @return RequestInstance - The newly created request instance.
+	 */
+	public function newRequest()
+	{
+		return RequestInstance::newInstance();
+	}
+
+	/**
+	 * Create a new report object to report data to the StopForumSPam API with.
+	 * @return ReportInstance - The newly created report instance.
+	 */
+	public function newReport()
 	{
 		// asdf
 	}
