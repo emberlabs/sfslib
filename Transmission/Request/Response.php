@@ -22,6 +22,8 @@ namespace emberlabs\sfslib\Transmission\Request;
 use \emberlabs\sfslib\Error\APIError;
 use \emberlabs\sfslib\Internal\RequestException;
 use \emberlabs\sfslib\Transmission\TransmissionInstanceInterface;
+use \emberlabs\sfslib\Transmission\Request\Error as RequestError;
+use \OpenFlame\Framework\Core;
 use \OpenFlame\Framework\Utility\JSON;
 use \InvalidArgumentException;
 
@@ -43,7 +45,7 @@ class Response implements \emberlabs\sfslib\Transmission\TransmissionResponseInt
 		// empty json = fail
 		if(!$json)
 		{
-			throw new RequestException('No response received from StopForumSpam API');
+			return new RequestError($transmission, array());
 		}
 
 		try
@@ -54,21 +56,17 @@ class Response implements \emberlabs\sfslib\Transmission\TransmissionResponseInt
 		catch(\RuntimeException $e)
 		{
 			// handling bad json responses
-			throw new RequestException('Invalid JSON received from StopForumSpam API');
+			return new RequestError($transmission, array());
 		}
 
 		if(!isset($data['successful']) || $data['successful'] != 1)
 		{
 			// error!
-
-			$response = new APIError($transmission, $data);
-			return $response;
+			return new RequestError($transmission, $data);
 		}
 
 		// success!
-
-		$response = new self($transmission, $data);
-		return $response;
+		return new self($transmission, $data);
 	}
 
 	protected function __construct(TransmissionInstanceInterface $transmission, $data)

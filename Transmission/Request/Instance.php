@@ -19,10 +19,11 @@
  */
 
 namespace emberlabs\sfslib\Transmission\Request;
-use \emberlabs\sfslib\Core;
 use \emberlabs\sfslib\Error\APIError;
 use \emberlabs\sfslib\Internal\RequestException;
 use \emberlabs\sfslib\Transmission\Request\Response as RequestResponse;
+use \OpenFlame\Framework\Core;
+use \OpenFlame\Framework\Dependency\Injector;
 use \InvalidArgumentException;
 
 /**
@@ -238,7 +239,8 @@ class Instance implements \emberlabs\sfslib\Transmission\TransmissionInstanceInt
 	 */
 	public function send()
 	{
-		$transmitter = Core::getTransmitter();
+		$injector = Injector::getInjector();
+		$transmitter = $injector->get('sfs.transmitter');
 
 		return $transmitter->send($this);
 	}

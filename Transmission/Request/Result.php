@@ -19,8 +19,8 @@
  */
 
 namespace emberlabs\sfslib\Transmission\Request;
-use \emberlabs\sfslib\Core;
 use \emberlabs\sfslib\Library as SFS;
+use \OpenFlame\Framework\Core;
 use \OpenFlame\Framework\Dependency\Injector;
 
 /**
