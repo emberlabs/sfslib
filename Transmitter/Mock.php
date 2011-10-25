@@ -41,10 +41,10 @@ class Mock implements TransmitterInterface
 
 	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
-		print_r('url built for request:');
-		print_r($transmission->buildURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()));
-		print_r('mock response:');
-		print_r($this->mock_response);
+		print_r('url built for request: ');
+		print_r($transmission->buildURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()) . "\n");
+		print_r('mock response: ');
+		print_r($this->mock_response  . "\n");
 
 		return $transmission->newResponse($this->mock_response);
 	}

@@ -105,7 +105,7 @@ class Result
 			$now = $injector->get('sfs.now');
 
 			$this->lastseen = (int) $data['lastseen'];
-			$this->lastseen_obj = new DateTime('@' . $data['lastseen']);
+			$this->lastseen_obj = new \DateTime('@' . $data['lastseen']);
 			$this->lastseen_diff = $this->lastseen_obj->diff($now, true);
 		}
 		else

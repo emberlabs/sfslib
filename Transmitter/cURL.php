@@ -21,6 +21,7 @@
 namespace emberlabs\sfslib\Transmitter;
 use \emberlabs\sfslib\Library as SFS;
 use \emberlabs\sfslib\Internal\cURLException;
+use \OpenFlame\Framework\Core;
 
 /**
  * StopForumSpam integration library - Transmitter object

@@ -89,8 +89,8 @@ class Library
 		);
 
 		$injector = Injector::getInstance();
-		$injector->setInjector('sfs.transmitter', function() {
-			return $injector->get(Core::getConfig('sfs.transmitter'));
+		$injector->setInjector('sfs.transmitter', function() use($injector) {
+			return $injector->get('sfs.transmitter.' . Core::getConfig('sfs.transmitter'));
 		});
 		$injector->setInjector('sfs.transmitter.curl', function() {
 			return new \emberlabs\sfslib\Transmitter\cURL();
@@ -105,7 +105,7 @@ class Library
 			return new \DateTime('now');
 		});
 
-		foreach($configs as $name => $config)
+		foreach($defaults as $name => $config)
 		{
 			if(Core::getConfig($name) === NULL)
 			{

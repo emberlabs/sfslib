@@ -33,8 +33,8 @@ interface TransmitterInterface
 {
 	/**
 	 * Send a transmission to StopForumSpam
-	 * @param \emberlabs\sfslib\Transmission\TrasmissionInstanceInterface $transmission - The transmission to send
+	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
 	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
 	 */
-	function send(\emberlabs\sfslib\Transmission\TrasmissionInstanceInterface $transmission);
+	function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission);
 }

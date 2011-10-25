@@ -30,7 +30,7 @@ namespace emberlabs\sfslib\Transmission;
  */
 interface TransmissionInstanceInterface
 {
-	function newInstance();
+	static function newInstance();
 	function buildURL();
 	function setUsername($username);
 	function setEmail($email);

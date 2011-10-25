@@ -69,7 +69,7 @@ class Response implements TransmissionResponseInterface
 			return new RequestError($transmission, array());
 		}
 
-		if(!isset($data['successful']) || $data['successful'] != 1)
+		if(!isset($data['success']) || $data['success'] != 1)
 		{
 			// error!
 			return new RequestError($transmission, $data);
@@ -86,22 +86,30 @@ class Response implements TransmissionResponseInterface
 	 */
 	protected function __construct(TransmissionInstanceInterface $transmission, $data)
 	{
-		foreach($data['username'] as $entry)
+		foreach($data as $type => $set)
 		{
-			$result = new Result($entry, Result::RESULT_USERNAME);
-			$this->data['username'][$result->getValue()] = $result;
-		}
+			if($type != 'username' && $type != 'email' && $type != 'ip')
+			{
+				continue;
+			}
 
-		foreach($data['email'] as $entry)
-		{
-			$result = new Result($entry, Result::RESULT_EMAIL);
-			$this->data['email'][$result->getValue()] = $result;
-		}
+			foreach($set as $entry)
+			{
+				if($type == 'username')
+				{
+					$result = new Result($entry, Result::RESULT_USERNAME);
+				}
+				elseif($type == 'email')
+				{
+					$result = new Result($entry, Result::RESULT_EMAIL);
+				}
+				elseif($type == 'ip')
+				{
+					$result = new Result($entry, Result::RESULT_IP);
+				}
 
-		foreach($data['ip'] as $entry)
-		{
-			$result = new Result($entry, Result::RESULT_IP);
-			$this->data['ip'][$result->getValue()] = $result;
+				$this->data[$type][$result->getValue()] = $result;
+			}
 		}
 	}
 

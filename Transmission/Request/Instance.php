@@ -61,9 +61,9 @@ class Instance implements TransmissionInstanceInterface
 	protected $num_datapoints = 0;
 
 	/**
-	 * @var \emberlabs\sfslib\Transmission\Request\Result - The result object.
+	 * @var \emberlabs\sfslib\Transmission\Request\Response - The result object.
 	 */
-	protected $result;
+	protected $response;
 
 	/**
 	 * Obtain a new instance of this object
@@ -80,28 +80,28 @@ class Instance implements TransmissionInstanceInterface
 	 */
 	public function buildURL()
 	{
-		$username = $email = $ip = '';
+		$data = array();
 		if(!empty($this->username))
 		{
 			$this->username = array_map('rawurlencode', $this->username);
-			$username .= 'username[]=' . implode('&username[]=', $this->username);
+			$data[] = 'username[]=' . implode('&username[]=', $this->username);
 		}
 
 		if(!empty($this->email))
 		{
 			$this->email = array_map('rawurlencode', $this->email);
-			$email .= 'email[]=' . implode('&email[]=', $this->email);
+			$data[] = 'email[]=' . implode('&email[]=', $this->email);
 		}
 
 		if(!empty($this->ip))
 		{
 			$this->ip = array_map('rawurlencode', $this->ip);
-			$ip .= 'ip[]=' . implode('&ip[]=', $this->ip);
+			$data[] = 'ip[]=' . implode('&ip[]=', $this->ip);
 		}
 
 		// Allow the API URL to be overridden if we need to, but if we don't want to, fall back to the default URL.
 		$url =  Core::getConfig('sfs.api_url') ?: self::API_URL;
-		$url .= '?' . implode('&', array($username, $email, $ip)) . '&f=json';
+		$url .= '?' . implode('&', $data) . '&f=json';
 
 		return $url;
 	}
@@ -240,7 +240,7 @@ class Instance implements TransmissionInstanceInterface
 	 */
 	public function send()
 	{
-		$injector = Injector::getInjector();
+		$injector = Injector::getInstance();
 		$transmitter = $injector->get('sfs.transmitter');
 
 		return $transmitter->send($this);
