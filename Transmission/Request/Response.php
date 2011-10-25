@@ -39,17 +39,17 @@ use \InvalidArgumentException;
  */
 class Response implements TransmissionResponseInterface
 {
-    /**
-     * @var array - The array of result objects representing the data returned by the API.
-     */
+	/**
+	 * @var array - The array of result objects representing the data returned by the API.
+	 */
 	protected $data = array();
 
-    /**
-     * Get the response object to represent the response to our query by the StopForumSpam API.
-     * @param TransmissionInstanceInterface $transmission - The transmission object that we sent to the API.
-     * @param string $json - The json string received from the API.
-     * @return self|RequestError - The response object representing data received from the API, or the error object representing the request error that occurred.
-     */
+	/**
+	 * Get the response object to represent the response to our query by the StopForumSpam API.
+	 * @param TransmissionInstanceInterface $transmission - The transmission object that we sent to the API.
+	 * @param string $json - The json string received from the API.
+	 * @return self|RequestError - The response object representing data received from the API, or the error object representing the request error that occurred.
+	 */
 	public static function getResponse(TransmissionInstanceInterface $transmission, $json)
 	{
 		// empty json = fail
@@ -79,11 +79,11 @@ class Response implements TransmissionResponseInterface
 		return new self($transmission, $data);
 	}
 
-    /**
-     * Constructor
-     * @param TransmissionInstanceInterface $transmission - The transmission object that we sent to the API.
-     * @param string $json - The data array of data received from the API.
-     */
+	/**
+	 * Constructor
+	 * @param TransmissionInstanceInterface $transmission - The transmission object that we sent to the API.
+	 * @param string $json - The data array of data received from the API.
+	 */
 	protected function __construct(TransmissionInstanceInterface $transmission, $data)
 	{
 		foreach($data['username'] as $entry)
@@ -105,59 +105,59 @@ class Response implements TransmissionResponseInterface
 		}
 	}
 
-    /**
-     * Is this an error object?
-     * @return boolean - It's not an error object!  Returns false.
-     */
+	/**
+	 * Is this an error object?
+	 * @return boolean - It's not an error object!  Returns false.
+	 */
 	public function isError()
 	{
 		return false;
 	}
 
-    /**
-     * Get a username result object from this response
-     * @param string $username - The username to look up
-     * @return NULL|RequestResult - The request result object we want, or NULL if no such result.
-     */
-    public function getUsername($username)
-    {
+	/**
+	 * Get a username result object from this response
+	 * @param string $username - The username to look up
+	 * @return NULL|RequestResult - The request result object we want, or NULL if no such result.
+	 */
+	public function getUsername($username)
+	{
         if(!isset($this->data['username'][(string) $username]))
         {
             return NULL;
         }
 
         return $this->data['username'][(string) $username];
-    }
+	}
 
-    /**
-     * Get an email result object from this response.
-     * @param string $email - The email to look up.
-     * @return NULL|RequestResult - The request result object we want, or NULL if no such result.
-     */
-    public function getEmail($email)
-    {
-        if(!isset($this->data['email'][(string) $email]))
-        {
-            return NULL;
-        }
+	/**
+	 * Get an email result object from this response.
+	 * @param string $email - The email to look up.
+	 * @return NULL|RequestResult - The request result object we want, or NULL if no such result.
+	 */
+	public function getEmail($email)
+	{
+		if(!isset($this->data['email'][(string) $email]))
+		{
+			return NULL;
+		}
 
-        return $this->data['email'][(string) $email];
-    }
+		return $this->data['email'][(string) $email];
+	}
 
-    /**
-     * Get an ip result object from this response.
-     * @param string $ip - The IP to look up.
-     * @return NULL|RequestResult - The request result object we want, or NULL if no such result.
-     */
-    public function getIP($ip)
-    {
-        if(!isset($this->data['ip'][(string) $ip]))
-        {
-            return NULL;
-        }
+	/**
+	 * Get an ip result object from this response.
+	 * @param string $ip - The IP to look up.
+	 * @return NULL|RequestResult - The request result object we want, or NULL if no such result.
+	 */
+	public function getIP($ip)
+	{
+		if(!isset($this->data['ip'][(string) $ip]))
+		{
+			return NULL;
+		}
 
-        return $this->data['ip'][(string) $ip];
-    }
+		return $this->data['ip'][(string) $ip];
+	}
 
 	/**
 	 * @ignore

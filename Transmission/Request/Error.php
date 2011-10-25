@@ -33,16 +33,16 @@ use \emberlabs\sfslib\Transmission\TransmissionErrorInterface;
  */
 class Error implements TransmissionErrorInterface
 {
-    /**
-     * @var array - Array of errors encountered.
-     */
+	/**
+	 * @var array - Array of errors encountered.
+	 */
 	protected $errors = array();
 
-    /**
-     * Constructor
-     * @param TransmissionInstanceInterface $transmission - The transmission instance linked to this error.
-     * @param array $data - The data array provided by the StopForumSpam API.
-     */
+	/**
+	 * Constructor
+	 * @param TransmissionInstanceInterface $transmission - The transmission instance linked to this error.
+	 * @param array $data - The data array provided by the StopForumSpam API.
+	 */
 	public function __construct(TransmissionInstanceInterface $transmission, array $data)
 	{
 		if(empty($data))
@@ -53,28 +53,28 @@ class Error implements TransmissionErrorInterface
 		}
 
 		if(!$data['success'] && isset($data['error']))
-        {
-            $this->errors[] = $data['error'];
-        }
-        else
-        {
-            $this->errors[] = 'Unknown error occurred';
-        }
+		{
+			$this->errors[] = $data['error'];
+		}
+		else
+		{
+			$this->errors[] = 'Unknown error occurred';
+		}
 	}
 
-    /**
-     * Is this an error object?
-     * @return boolean - It's an error object!  Returns true.
-     */
+	/**
+	 * Is this an error object?
+	 * @return boolean - It's an error object!  Returns true.
+	 */
 	public function isError()
 	{
 		return true;
 	}
 
-    /**
-     * Get the errors encountered.
-     * @return array - The array of errors encountered.
-     */
+	/**
+	 * Get the errors encountered.
+	 * @return array - The array of errors encountered.
+	 */
 	public function getErrors()
 	{
 		return $this->errors;
