@@ -19,7 +19,6 @@
  */
 
 namespace emberlabs\sfslib\Transmission\Request;
-use \emberlabs\sfslib\Error\APIError;
 use \emberlabs\sfslib\Internal\RequestException;
 use \emberlabs\sfslib\Transmission\TransmissionInstanceInterface;
 use \emberlabs\sfslib\Transmission\TransmissionResponseInterface;
