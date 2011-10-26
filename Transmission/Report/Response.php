@@ -21,22 +21,22 @@
 namespace emberlabs\sfslib\Transmission\Report;
 use \emberlabs\sfslib\Internal\ReportException;
 use \emberlabs\sfslib\Transmission\TransmissionInstanceInterface;
-use \emberlabs\sfslib\Transmission\Report\Response as ReportResponse;
+use \emberlabs\sfslib\Transmission\TransmissionResponseInterface;
 use \emberlabs\sfslib\Transmission\Report\Error as ReportError;
-use \OpenFlame\Framework\Core;
-use \OpenFlame\Framework\Dependency\Injector;
+use \emberlabs\sfslib\Transmission\Report\Error as ReportResult;
+use \OpenFlame\Framework\Utility\JSON;
 use \InvalidArgumentException;
 
 /**
- * StopForumSpam integration library - Report Instance object
- * 	     Represents the report to be made to the StopForumSpam API.
+ * StopForumSpam integration library - Report response object
+ * 	     Represents the response from the StopForumSpam API.
  *
  * @package     sfslib
  * @author      emberlabs.org
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class Instance implements TransmissionInstanceInterface
+class Response implements TransmissionResponseInterface
 {
 	// asdf
 }
