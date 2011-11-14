@@ -75,10 +75,21 @@ class Instance implements TransmissionInstanceInterface
 	}
 
 	/**
-	 * Build the URL params to query StopForumSpam with.
+	 * Build the POST URL to query StopForumSpam with.
+	 * @return string - The URL param string to use.
+	 *
+	 * @throws RequestException
+	 */
+	public function buildPOSTURL()
+	{
+		throw new RequestException('POST-based API requests are not supported');
+	}
+
+	/**
+	 * Build the GET URL params to query StopForumSpam with.
 	 * @return string - The URL param string to use.
 	 */
-	public function buildURL()
+	public function buildGETURL()
 	{
 		$data = array();
 		if(!empty($this->username))
@@ -243,7 +254,7 @@ class Instance implements TransmissionInstanceInterface
 		$injector = Injector::getInstance();
 		$transmitter = $injector->get('sfs.transmitter');
 
-		return $transmitter->send($this);
+		return $transmitter->sendGET($this);
 	}
 
 	/**

@@ -62,11 +62,11 @@ class Error implements TransmissionErrorInterface
 		8		=> 'Invalid API key provided for reporting',
 		16		=> 'Cannot report own email',
 		32		=> 'Cannot report own IP',
-		64		=> 'Database error',
-		128		=> '', // ?
-		256		=> '', // ?
+		64		=> 'SFS Database error',
+		128		=> 'SFS Database error', // ?
+		256		=> 'SFS Database error', // ?
 		512		=> 'Duplicate submission encountered',
-		1024	=> '', // ?
+		1024	=> 'Self-reporting not allowed', // ?
 
 		32768	=> 'Serialized data invalid',
 		65536	=> 'Maintenance mode',
@@ -88,10 +88,14 @@ class Error implements TransmissionErrorInterface
 
 		if(!$data['success'] && isset($data['errno']))
 		{
-			$this->errors[] = $data['error'];
-			foreach($errors as $error)
+			$errno = (int) $data['errno'];
+
+			foreach($errors as $e => $error)
 			{
-				// asdf
+				if($errno & $e)
+				{
+					$this->errors[] = $error;
+				}
 			}
 		}
 		else

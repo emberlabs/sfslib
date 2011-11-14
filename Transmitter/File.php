@@ -33,7 +33,24 @@ use \OpenFlame\Framework\Core;
  */
 class File implements TransmitterInterface
 {
-	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
+	public function sendPOST(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
+	{
+		// Set the stream context options
+		$stream = stream_context_create(array(
+			'http'	=> array(
+				'method'	=> 'POST',
+				'header' 	=> 'Content-type: application/x-www-form-urlencoded',
+				'content'	=> $transmission->buildPOSTData(),
+				'timeout'	=> Core::getConfig('sfs.timeout'),
+			),
+		));
+
+		$json = @file_get_contents($transmission->buildPOSTURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
+
+		return $transmission->newResponse($json);
+	}
+
+	public function sendGET(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
 		// Set the stream timeout, just in case
 		$stream = stream_context_create(array(
@@ -42,7 +59,7 @@ class File implements TransmitterInterface
 			),
 		));
 
-		$json = @file_get_contents($transmission->buildURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
+		$json = @file_get_contents($transmission->buildGETURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
 
 		return $transmission->newResponse($json);
 	}

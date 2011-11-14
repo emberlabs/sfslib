@@ -38,5 +38,5 @@ use \InvalidArgumentException;
  */
 class Instance implements TransmissionInstanceInterface
 {
-	// asdf
+	const API_URL = 'http://www.stopforumspam.com/api';
 }

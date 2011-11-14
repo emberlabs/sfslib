@@ -31,7 +31,9 @@ namespace emberlabs\sfslib\Transmission;
 interface TransmissionInstanceInterface
 {
 	static function newInstance();
-	function buildURL();
+	function buildGETURL();
+	function buildPOSTURL();
+	function buildPOSTData();
 	function setUsername($username);
 	function setEmail($email);
 	function setIP($ip);
