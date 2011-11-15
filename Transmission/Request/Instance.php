@@ -86,6 +86,17 @@ class Instance implements TransmissionInstanceInterface
 	}
 
 	/**
+	 * Build the POST data string to send to the server.
+	 * @return string - The POST data string to use.
+	 *
+	 * @throws RequestException
+	 */
+	public function buildPOSTData()
+	{
+		throw new RequestException('POST-based API requests are not supported');
+	}
+
+	/**
 	 * Build the GET URL params to query StopForumSpam with.
 	 * @return string - The URL param string to use.
 	 */
@@ -112,7 +123,7 @@ class Instance implements TransmissionInstanceInterface
 
 		// Allow the API URL to be overridden if we need to, but if we don't want to, fall back to the default URL.
 		$url =  Core::getConfig('sfs.api_url') ?: self::API_URL;
-		$url .= '?' . implode('&', $data) . '&f=json';
+		$url .= '?' . implode('&', $data) . '&f=json&unix=1';
 
 		return $url;
 	}
