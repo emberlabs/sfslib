@@ -34,6 +34,10 @@ use \OpenFlame\Framework\Core;
  */
 class cURL implements TransmitterInterface
 {
+	/**
+	 * Constructor
+	 * @throws cURLException
+	 */
 	public function __construct()
 	{
 		if(!function_exists('curl_init'))
