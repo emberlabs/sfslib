@@ -42,10 +42,39 @@ class cURL implements TransmitterInterface
 		}
 	}
 
-	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
+	/**
+	 * Send a POST transmission to StopForumSpam
+	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
+	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
+	 */
+	public function sendPOST(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
 		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL, $transmission->buildURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()));
+		curl_setopt($curl, CURLOPT_URL, $transmission->buildPOSTURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $transmission->buildPOSTData());
+		curl_setopt($curl, CURLOPT_TIMEOUT, Core::getConfig('sfs.timeout'));
+		curl_setopt($curl, CURLOPT_USERAGENT, $this->buildUserAgent());
+		$json = curl_exec($curl);
+		if(curl_errno($curl))
+		{
+			throw new cURLException('cURL error: ' . curl_error($curl), curl_errno($curl));
+		}
+		curl_close($curl);
+
+		return $transmission->newResponse($json);
+	}
+
+	/**
+	 * Send a GET transmission to StopForumSpam
+	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
+	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
+	 */
+	public function sendGET(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
+	{
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $transmission->buildGETURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_TIMEOUT, Core::getConfig('sfs.timeout'));
 		curl_setopt($curl, CURLOPT_USERAGENT, $this->buildUserAgent());

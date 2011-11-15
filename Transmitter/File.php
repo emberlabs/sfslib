@@ -33,6 +33,11 @@ use \OpenFlame\Framework\Core;
  */
 class File implements TransmitterInterface
 {
+	/**
+	 * Send a POST transmission to StopForumSpam
+	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
+	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
+	 */
 	public function sendPOST(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
 		// Set the stream context options
@@ -45,11 +50,16 @@ class File implements TransmitterInterface
 			),
 		));
 
-		$json = @file_get_contents($transmission->buildPOSTURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
+		$json = @file_get_contents($transmission->buildPOSTURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
 
 		return $transmission->newResponse($json);
 	}
 
+	/**
+	 * Send a GET transmission to StopForumSpam
+	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
+	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
+	 */
 	public function sendGET(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
 		// Set the stream timeout, just in case
@@ -59,7 +69,7 @@ class File implements TransmitterInterface
 			),
 		));
 
-		$json = @file_get_contents($transmission->buildGETURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
+		$json = @file_get_contents($transmission->buildGETURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()), false, $stream);
 
 		return $transmission->newResponse($json);
 	}

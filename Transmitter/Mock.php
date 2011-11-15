@@ -39,10 +39,34 @@ class Mock implements TransmitterInterface
 		$this->mock_response = (string) $response;
 	}
 
-	public function send(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
+	/**
+	 * Send a POST transmission to StopForumSpam
+	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
+	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
+	 */
+	public function sendPOST(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
 	{
+		print_r('mock POST request to API' . "\n");
 		print_r('url built for request: ');
-		print_r($transmission->buildURL() . '&unix=1&useragent=' . rawurlencode(SFS::getUserAgent()) . "\n");
+		print_r($transmission->buildPOSTURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()) . "\n");
+		print_r('post data sent for request: ');
+		print_r($transmission->buildPOSTData() . "\n");
+		print_r('mock response: ');
+		print_r($this->mock_response  . "\n");
+
+		return $transmission->newResponse($this->mock_response);
+	}
+
+	/**
+	 * Send a GET transmission to StopForumSpam
+	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
+	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
+	 */
+	public function sendGET(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission)
+	{
+		print_r('mock GET request to API' . "\n");
+		print_r('url built for request: ');
+		print_r($transmission->buildGETURL() . '&useragent=' . rawurlencode(SFS::getUserAgent()) . "\n");
 		print_r('mock response: ');
 		print_r($this->mock_response  . "\n");
 

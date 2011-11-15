@@ -32,14 +32,14 @@ namespace emberlabs\sfslib\Transmitter;
 interface TransmitterInterface
 {
 	/**
-	 * Send a transmission to StopForumSpam
+	 * Send a POST transmission to StopForumSpam
 	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
 	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
 	 */
 	function sendGET(\emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission);
 
 	/**
-	 * Send a transmission to StopForumSpam
+	 * Send a GET transmission to StopForumSpam
 	 * @param \emberlabs\sfslib\Transmission\TransmissionInstanceInterface $transmission - The transmission to send
 	 * @return \emberlabs\sfslib\Transmission\TransmissionResultInterface - The transmission result object
 	 */
