@@ -130,7 +130,7 @@ class Instance implements TransmissionInstanceInterface
 	{
 		if($this->response !== NULL)
 		{
-			throw new ReportException('Cannot modify a request already sent');
+			throw new ReportException('Cannot modify a report already sent');
 		}
 
 		$this->username = $username;
@@ -150,7 +150,7 @@ class Instance implements TransmissionInstanceInterface
 	{
 		if($this->response !== NULL)
 		{
-			throw new ReportException('Cannot modify a request already sent');
+			throw new ReportException('Cannot modify a report already sent');
 		}
 
 		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false)
@@ -175,7 +175,7 @@ class Instance implements TransmissionInstanceInterface
 	{
 		if($this->response !== NULL)
 		{
-			throw new ReportException('Cannot modify a request already sent');
+			throw new ReportException('Cannot modify a report already sent');
 		}
 
 		/**
@@ -198,6 +198,26 @@ class Instance implements TransmissionInstanceInterface
 		}
 
 		$this->ip = $ip;
+
+		return $this;
+	}
+
+
+	/**
+	 * Sets the evidence that we are transmitting.
+	 * @var string $evidence - The evidence to report.
+	 * @return \emberlabs\sfslib\Transmission\Report\Instance - Provides a fluid interface.
+	 *
+	 * @throws ReportException
+	 */
+	public function setEvidence($evidence)
+	{
+		if($this->response !== NULL)
+		{
+			throw new ReportException('Cannot modify a report already sent');
+		}
+
+		$this->evidence = $evidence;
 
 		return $this;
 	}
@@ -247,7 +267,7 @@ class Instance implements TransmissionInstanceInterface
 
 		if(!empty($this->evidence))
 		{
-			return $transmitter->setPOST($this);
+			return $transmitter->sendPOST($this);
 		}
 		else
 		{
