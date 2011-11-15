@@ -114,7 +114,7 @@ class Instance implements TransmissionInstanceInterface
 
 		// Allow the API URL to be overridden if we need to, but if we don't want to, fall back to the default URL.
 		$url =  Core::getConfig('sfs.api_url') ?: self::API_URL;
-		$url .= '?' . implode('&', $data) . '&f=json&unix=1';
+		$url .= '?' . implode('&', $data) . '&f=json';
 
 		return $url;
 	}
@@ -232,11 +232,18 @@ class Instance implements TransmissionInstanceInterface
 	/**
 	 * Send the report to the API.
 	 * @return ReportResponse|RequestError - The response or error received from the API.
+	 *
+	 * @throws ReportException
 	 */
 	public function send()
 	{
 		$injector = Injector::getInstance();
 		$transmitter = $injector->get('sfs.transmitter');
+
+		if(empty($this->username) || empty($this->email) || empty($this->ip))
+		{
+			throw new ReportException('Report must contain a username, an email, and an IP');
+		}
 
 		if(!empty($this->evidence))
 		{

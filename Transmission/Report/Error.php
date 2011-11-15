@@ -34,6 +34,11 @@ use \emberlabs\sfslib\Transmission\TransmissionErrorInterface;
 class Error implements TransmissionErrorInterface
 {
 	/**
+	 * @var integer - The error code received.
+	 */
+	protected $code = 0;
+
+	/**
 	 * @var array - Array of errors encountered.
 	 */
 	protected $errors = array();
@@ -54,24 +59,6 @@ class Error implements TransmissionErrorInterface
 	const ADD_FIELD_ERROR = 32768;
 	const MAINT_MODE = 65536;
 
-	protected $error_descs = array(
-		0		=> 'No error',
-		1		=> 'Invalid email address provided',
-		2		=> 'Invalid IP address provided',
-		4		=> 'Invalid username provided',
-		8		=> 'Invalid API key provided for reporting',
-		16		=> 'Cannot report own email',
-		32		=> 'Cannot report own IP',
-		64		=> 'StopForumSpam Database error',
-		128		=> 'StopForumSpam Database error', // ?
-		256		=> 'StopForumSpam Database error', // ?
-		512		=> 'Duplicate submission encountered',
-		1024		=> 'Sanity check', // ?
-
-		32768	=> 'Serialized data invalid',
-		65536	=> 'Maintenance mode',
-	);
-
 	/**
 	 * Constructor
 	 * @param TransmissionInstanceInterface $transmission - The transmission instance linked to this error.
@@ -86,12 +73,34 @@ class Error implements TransmissionErrorInterface
 			return;
 		}
 
+		$error_descs = array(
+			0		=> 'No error',
+			1		=> 'Invalid email address provided',
+			2		=> 'Invalid IP address provided',
+			4		=> 'Invalid username provided',
+			8		=> 'Invalid API key provided for reporting',
+
+			16		=> 'Cannot report own email',
+			32		=> 'Cannot report own IP',
+
+			64		=> 'StopForumSpam Database error',
+			128		=> 'StopForumSpam Database error', // ?
+			256		=> 'StopForumSpam Database error', // ?
+			512		=> 'Duplicate submission encountered',
+			1024	=> 'Sanity check', // ?
+
+			32768	=> 'Serialized data invalid',
+			65536	=> 'Maintenance mode',
+		);
+
 		if(!$data['success'] && isset($data['errno']))
 		{
-			foreach($this->error_descs as $error => $desc)
+			$this->code = $data['errno'];
+
+			foreach($error_descs as $error => $desc)
 			{
 				// asdf
-				if($data['error'] & $error)
+				if($this->code & $error)
 				{
 					$this->errors[$error] = $desc;
 				}

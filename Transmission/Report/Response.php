@@ -77,4 +77,23 @@ class Response implements TransmissionResponseInterface
 		// success!
 		return new self($transmission, $data);
 	}
+
+	/**
+	 * Constructor
+	 * @param TransmissionInstanceInterface $transmission - The transmission object that we sent to the API.
+	 * @param string $json - The data array of data received from the API.
+	 */
+	protected function __construct(TransmissionInstanceInterface $transmission, $data)
+	{
+		// asdf
+	}
+
+	/**
+	 * Is this an error object?
+	 * @return boolean - It's not an error object!  Returns false.
+	 */
+	public function isError()
+	{
+		return false;
+	}
 }

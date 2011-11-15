@@ -186,6 +186,6 @@ class Library
 	 */
 	public function newReport()
 	{
-		// asdf
+		return ReportInstance::newInstance();
 	}
 }
