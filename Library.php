@@ -42,7 +42,7 @@ class Library
 	/**
 	 * @const string - The version of the library.
 	 */
-	const LIB_VERSION = '0.5.0-dev';
+	const LIB_VERSION = '0.5.1-dev';
 
 	/**
 	 * @var \emberlabs\sfslib\Library - The singleton instance of this object.
@@ -162,7 +162,13 @@ class Library
 	 */
 	public function report($username, $email, $ip)
 	{
-		// asdf
+		$report = ReportInstance::newInstance()
+			->setUsername($username)
+			->setEmail($email)
+			->setIP($ip);
+
+		// This will NOT return the just-created RequestInstance, instead it will return a RequestError or a RequestResponse object.
+		return $report->send();
 	}
 
 	/**

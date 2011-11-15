@@ -122,7 +122,7 @@ class Instance implements TransmissionInstanceInterface
 		}
 
 		// Allow the API URL to be overridden if we need to, but if we don't want to, fall back to the default URL.
-		$url =  Core::getConfig('sfs.api_url') ?: self::API_URL;
+		$url = Core::getConfig('sfs.api_url') ?: self::API_URL;
 		$url .= '?' . implode('&', $data) . '&f=json&unix=1';
 
 		return $url;
@@ -231,7 +231,7 @@ class Instance implements TransmissionInstanceInterface
 
 	/**
 	 * Get the response object linked to this query
-	 * @return RequestResponse|APIError|NULL - The response object, the error object for the error(s) received from the API, or NULL if request not yet sent.
+	 * @return RequestResponse|RequestError|NULL - The response object, the error object for the error(s) received from the API, or NULL if request not yet sent.
 	 */
 	public function getResponse()
 	{
