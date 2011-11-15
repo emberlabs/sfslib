@@ -38,5 +38,43 @@ use \InvalidArgumentException;
  */
 class Response implements TransmissionResponseInterface
 {
-	// asdf
+	/**
+	 * @var array - The array of result objects representing the data returned by the API.
+	 */
+	protected $data = array();
+
+	/**
+	 * Get the response object to represent the response to our report to the StopForumSpam API.
+	 * @param TransmissionInstanceInterface $transmission - The transmission object that we sent to the API.
+	 * @param string $json - The json string received from the API.
+	 * @return self|ReportError - The response object representing data received from the API, or the error object representing the request error that occurred.
+	 */
+	public static function getResponse(TransmissionInstanceInterface $transmission, $json)
+	{
+		// empty json = fail
+		if(!$json)
+		{
+			return new ReportError($transmission, array());
+		}
+
+		try
+		{
+			// decode the json into an associative array
+			$data = JSON::decode($json);
+		}
+		catch(\RuntimeException $e)
+		{
+			// handling bad json responses
+			return new ReportError($transmission, array());
+		}
+
+		if(!isset($data['success']) || $data['success'] != 1)
+		{
+			// error!
+			return new ReportError($transmission, $data);
+		}
+
+		// success!
+		return new self($transmission, $data);
+	}
 }
