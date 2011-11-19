@@ -31,11 +31,22 @@ use \OpenFlame\Framework\Dependency\Injector;
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class Result
+class Result implements \ArrayAccess
 {
 	const RESULT_USERNAME = 1;
 	const RESULT_EMAIL = 2;
 	const RESULT_IP = 3;
+
+	protected $data = array(
+		'type'				=> NULL,
+		'value'				=> '',
+		'appears'			=> NULL,
+		'normalized'		=> NULL,
+		'lastseen'			=> NULL,
+		'lastseen_obj'		=> NULL,
+		'lastseen_diff'		=> NULL,
+		'frequency'			=> NULL,
+	);
 
 	/**
 	 * @var integer - The result type.
@@ -89,29 +100,23 @@ class Result
 			throw new RequestException('Invalid result type specified');
 		}
 
-		$this->type = $result_type;
-
-		$this->value = $data['value'];
-		$this->frequency = $data['frequency'];
-		if(isset($data['normalized']))
-		{
-			$this->normalized = $data['normalized'];
-		}
-
 		if($data['appears'])
 		{
-			$this->appears = true;
 			$injector = Injector::getInstance();
+
+			$data['appears'] = true;
 			$now = $injector->get('sfs.now');
 
-			$this->lastseen = (int) $data['lastseen'];
-			$this->lastseen_obj = new \DateTime('@' . $data['lastseen']);
-			$this->lastseen_diff = $this->lastseen_obj->diff($now, true);
+			$data['lastseen'] = (int) $data['lastseen'];
+			$data['lastseen_obj'] = $lastseen = new \DateTime('@' . $data['lastseen']);
+			$data['lastseen_obj'] = $lastseen->diff($now, true);
 		}
 		else
 		{
-			$this->appears = false;
+			$data['appears'] = false;
 		}
+
+		$this->data = $data;
 	}
 
 	/**
@@ -120,7 +125,7 @@ class Result
 	 */
 	public function getType()
 	{
-		return $this->type;
+		return $this->data['type'];
 	}
 
 	/**
@@ -129,7 +134,7 @@ class Result
 	 */
 	public function getValue()
 	{
-		return (string) $this->value;
+		return (string) $this->data['value'];
 	}
 
 	/**
@@ -138,7 +143,7 @@ class Result
 	 */
 	public function getNormalized()
 	{
-		return (string) $this->normalized;
+		return (string) $this->data['normalized'];
 	}
 
 	/**
@@ -147,7 +152,7 @@ class Result
 	 */
 	public function getLastseen()
 	{
-		return $this->lastseen_obj;
+		return $this->data['lastseen_obj'];
 	}
 
 	/**
@@ -156,7 +161,7 @@ class Result
 	 */
 	public function getLastseenSpan()
 	{
-		return $this->lastseen_diff;
+		return $this->data['lastseen_diff'];
 	}
 
 	/**
@@ -165,7 +170,7 @@ class Result
 	 */
 	public function getLastseenTimestamp()
 	{
-		return (int) $this->lastseen;
+		return (int) $this->data['lastseen'];
 	}
 
 	/**
@@ -174,7 +179,7 @@ class Result
 	 */
 	public function getFrequency()
 	{
-		return (int) $this->frequency;
+		return (int) $this->data['frequency'];
 	}
 
 	/**
@@ -183,6 +188,79 @@ class Result
 	 */
 	public function getAppears()
 	{
-		return (bool) $this->appears;
+		return (bool) $this->data['appears'];
 	}
+
+	/**
+	 * Magic methods
+	 */
+
+	/**
+	 * __isset() magic method for grabbing reported data (and API IDs).
+	 * @param string $name - The entry to check.
+	 * @return boolean - Does the entry exist?
+	 */
+	public function __isset($name)
+	{
+		return isset($this->data[(string) $name]);
+	}
+
+	/**
+	 * __get() magic method for grabbing reported data (and API IDs).
+	 * @param string $name - The entry to get.
+	 * @return mixed - The entry's value, or NULL if it does not exist
+	 */
+	public function __get($name)
+	{
+		if(isset($this->data[(string) $name]))
+		{
+			return $this->data[(string) $name];
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+	/**
+	 * ArrayAccess methods
+	 */
+
+	/**
+	 * Check to see if the specified offset exists.
+	 * @param string $offset - The offset to check.
+	 * @return boolean - Does the offset exist?
+	 */
+	public function offsetExists($offset)
+	{
+		return isset($this->data[(string) $offset]);
+	}
+
+	/**
+	 * Get the specified offset value.
+	 * @param string $offset - The offset to get.
+	 * @return mixed - The offset's value, or NULL if it does not exist
+	 */
+	public function offsetGet($offset)
+	{
+		if(isset($this->data[(string) $offset]))
+		{
+			return $this->data[(string) $offset];
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+	/**
+	 * @ignore
+	 */
+	public function offsetSet($offset, $value) { }
+
+	/**
+	 * @ignore
+	 */
+	public function offsetUnset($offset) { }
+
 }

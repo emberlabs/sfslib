@@ -36,10 +36,10 @@ use \InvalidArgumentException;
  * @license     http://opensource.org/licenses/mit-license.php The MIT License
  * @link        https://github.com/emberlabs/sfslib
  */
-class Response implements TransmissionResponseInterface
+class Response implements TransmissionResponseInterface, \ArrayAccess
 {
 	/**
-	 * @var array - The array of result objects representing the data returned by the API.
+	 * @var array - The array of data returned by the API.
 	 */
 	protected $data = array();
 
@@ -85,8 +85,128 @@ class Response implements TransmissionResponseInterface
 	 */
 	protected function __construct(TransmissionInstanceInterface $transmission, $data)
 	{
-		// asdf
+		$this->data = array_merge($transmission->getData(), array(
+			'recordid'		=> $data['recordid'],
+			'evidenceid'	=> $data['evidenceid'],
+		));
 	}
+
+	/**
+	 * Get the username reported.
+	 * @return stirng - The username reported.
+	 */
+	public function getReportedUsername()
+	{
+		return $this->data['username'];
+	}
+
+	/**
+	 * Get the email reported.
+	 * @return string - The email reported.
+	 */
+	public function getReportedEmail()
+	{
+		return $this->data['email'];
+	}
+
+	/**
+	 * Get the IP reported.
+	 * @return string - The IP reported.
+	 */
+	public function getReportedIP()
+	{
+		return $this->data['ip'];
+	}
+
+	/**
+	 * Get the evidence ID for this report (if evidence was submitted).
+	 * @return NULL|integer - The evidence ID for the SFS report if evidence was submitted, or NULL if no evidence submitted.
+	 */
+	public function getEvidenceID()
+	{
+		return $this->data['evidenceid'];
+	}
+
+	/**
+	 * Get the record ID for this report.
+	 * @return integer - The record ID for the SFS report.
+	 */
+	public function getRecordID()
+	{
+		return $this->data['recordid'];
+	}
+
+	/**
+	 * Magic methods
+	 */
+
+	/**
+	 * __isset() magic method for grabbing reported data (and API IDs).
+	 * @param string $name - The entry to check.
+	 * @return boolean - Does the entry exist?
+	 */
+	public function __isset($name)
+	{
+		return isset($this->data[(string) $name]);
+	}
+
+	/**
+	 * __get() magic method for grabbing reported data (and API IDs).
+	 * @param string $name - The entry to get.
+	 * @return mixed - The entry's value, or NULL if it does not exist
+	 */
+	public function __get($name)
+	{
+		if(isset($this->data[(string) $name]))
+		{
+			return $this->data[(string) $name];
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+	/**
+	 * ArrayAccess methods
+	 */
+
+	/**
+	 * Check to see if the specified offset exists.
+	 * @param string $offset - The offset to check.
+	 * @return boolean - Does the offset exist?
+	 */
+	public function offsetExists($offset)
+	{
+		return isset($this->data[(string) $offset]);
+	}
+
+	/**
+	 * Get the specified offset value.
+	 * @param string $offset - The offset to get.
+	 * @return mixed - The offset's value, or NULL if it does not exist
+	 */
+	public function offsetGet($offset)
+	{
+		if(isset($this->data[(string) $offset]))
+		{
+			return $this->data[(string) $offset];
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+	/**
+	 * @ignore
+	 */
+	public function offsetSet($offset, $value) { }
+
+	/**
+	 * @ignore
+	 */
+	public function offsetUnset($offset) { }
 
 	/**
 	 * Is this an error object?

@@ -76,6 +76,20 @@ class Instance implements TransmissionInstanceInterface
 	}
 
 	/**
+	 * Get the data that will be reported or that has already been reported to StopForumSpam.
+	 * @return array - The array of data to report or reported to StopForumSpam.
+	 */
+	public function getData()
+	{
+		return array(
+			'username'		=> $this->username,
+			'email'			=> $this->email,
+			'ip'			=> $this->ip,
+			'evidence'		=> $this->evidence,
+		);
+	}
+
+	/**
 	 * Build the POST URL to query StopForumSpam with.
 	 * @return string - The URL param string to use.
 	 */
