@@ -116,7 +116,7 @@ class Result implements \ArrayAccess
 			$data['appears'] = false;
 		}
 
-		$this->data = $data;
+		$this->data = array_merge($this->data, $data);
 	}
 
 	/**
