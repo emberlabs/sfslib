@@ -27,6 +27,12 @@ Changes in 0.3.0:
 * Add scripts for building PHAR packages easily for PHP 5.3+ users.
 * Added method SFSRequestResult->getSuccessful() to see if the lookup was successful or not.
 
-Changes in 0.4.0:
+Changes in 1.0.0-b1:
 
-* Rewrote the library to make use of PHP 5.3 OOP, dropped support for PHP 5.2.x
+* Completely rewrote the library to make use of PHP 5.3 OOP, dropped support for PHP 5.2.x
+* Added ArrayAccess, magic method support for getting result data in `Request\Result`
+* Added `Report\*` for reporting data to StopForumSpam
+* Added multiple transmitters including cURL, File, and Mock (for testing) for various methods of reporting/requesting data from the SFS API.
+* Added ability to request up to 15 data parameters from the SFS API at once (as per the API documentation).
+* Added support for reporting evidence with spammer reports, will automatically switch to using POST reporting when evidence is provided for the report
+* Added dependency on OpenFlame Framework to reduce the amount of [DRY](http://en.wikipedia.org/wiki/DRY)

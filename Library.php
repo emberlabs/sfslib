@@ -167,7 +167,7 @@ class Library
 			->setEmail($email)
 			->setIP($ip);
 
-		// This will NOT return the just-created RequestInstance, instead it will return a RequestError or a RequestResponse object.
+		// This will NOT return the just-created ReportInstance, instead it will return a ReportError or a ReportResponse object.
 		return $report->send();
 	}
 
