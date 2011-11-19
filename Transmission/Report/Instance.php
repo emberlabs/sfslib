@@ -19,6 +19,7 @@
  */
 
 namespace emberlabs\sfslib\Transmission\Report;
+use \emberlabs\sfslib\Library as SFS;
 use \emberlabs\sfslib\Internal\ReportException;
 use \emberlabs\sfslib\Transmission\TransmissionInstanceInterface;
 use \emberlabs\sfslib\Transmission\Report\Response as ReportResponse;
@@ -81,7 +82,7 @@ class Instance implements TransmissionInstanceInterface
 	public function buildPOSTURL()
 	{
 		$url = Core::getConfig('sfs.api_url') ?: self::API_URL;
-		$url .= '?f=json';
+		$url .= '?f=json&id=1';
 
 		return $url;
 	}
@@ -92,11 +93,14 @@ class Instance implements TransmissionInstanceInterface
 	 */
 	public function buildPOSTData()
 	{
+		$sfs = SFS::getInstance();
+
 		return http_build_query(array(
 			'username'		=> $this->username,
 			'email'			=> $this->email,
 			'ip'			=> $this->ip,
 			'evidence'		=> $this->evidence,
+			'api_key' 		=> $sfs->getKey(),
 		));
 	}
 
@@ -106,15 +110,18 @@ class Instance implements TransmissionInstanceInterface
 	 */
 	public function buildGETURL()
 	{
+		$sfs = SFS::getInstance();
+
 		$data = array(
 			'username=' . rawurlencode($this->username),
 			'email=' . rawurlencode($this->email),
 			'ip=' . rawurlencode($this->ip),
+			'api_key=' . rawurlencode($sfs->getKey()),
 		);
 
 		// Allow the API URL to be overridden if we need to, but if we don't want to, fall back to the default URL.
 		$url =  Core::getConfig('sfs.api_url') ?: self::API_URL;
-		$url .= '?' . implode('&', $data) . '&f=json';
+		$url .= '?' . implode('&', $data) . '&f=json&id=1';
 
 		return $url;
 	}
