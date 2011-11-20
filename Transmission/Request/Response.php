@@ -133,7 +133,7 @@ class Response implements TransmissionResponseInterface
             return NULL;
         }
 
-        return $this->data['username'][(string) $username];
+        return mb_strtolower($this->data['username'][(string) $username]);
 	}
 
 	/**
@@ -148,7 +148,7 @@ class Response implements TransmissionResponseInterface
 			return NULL;
 		}
 
-		return $this->data['email'][(string) $email];
+		return mb_strtolower($this->data['email'][(string) $email]);
 	}
 
 	/**
@@ -163,7 +163,7 @@ class Response implements TransmissionResponseInterface
 			return NULL;
 		}
 
-		return $this->data['ip'][(string) $ip];
+		return strtolower($this->data['ip'][(string) $ip]);
 	}
 
 	/**
