@@ -36,3 +36,10 @@ Changes in 1.0.0-b1:
 * Added ability to request up to 15 data parameters from the SFS API at once (as per the API documentation).
 * Added support for reporting evidence with spammer reports, will automatically switch to using POST reporting when evidence is provided for the report
 * Added dependency on OpenFlame Framework to reduce the amount of [DRY](http://en.wikipedia.org/wiki/DRY)
+
+Changes in 1.0.0-b2:
+
+* Fix bug with defaults being lost in `Request\Result`
+* Require an API key when reporting to the SFS API
+* Fix bug with lastseen object not being a DateTime object
+* Workaround for an API issue where API returns response with modified data being used as array indexes within the response
