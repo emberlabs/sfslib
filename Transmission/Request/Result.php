@@ -49,46 +49,6 @@ class Result implements \ArrayAccess
 	);
 
 	/**
-	 * @var integer - The result type.
-	 */
-	protected $type;
-
-	/**
-	 * @var string - The value of this result.
-	 */
-	protected $value = '';
-
-	/**
-	 * @var string - The normalized value of this result (only applies to emails).
-	 */
-	protected $normalized;
-
-	/**
-	 * @var integer - The UNIX timestamp of when the queried data was last seen (if applicable).
-	 */
-	protected $lastseen;
-
-	/**
-	 * @var \DateTime - The DateTime object representing when the queried data was last seen (if applicable).
-	 */
-	protected $lastseen_obj;
-
-	/**
-	 * @var \DateInterval - The DateInterval object representing the interval between now and when the queried data was last seen (if applicable).
-	 */
-	protected $lastseen_diff;
-
-	/**
-	 * @var integer - The number of times that the queried data was reported.
-	 */
-	protected $frequency;
-
-	/**
-	 * @var bool - Whether the queried data has been reported or not.
-	 */
-	protected $appears;
-
-	/**
 	 * Constructor
 	 * @throws RequestException
 	 */
@@ -109,7 +69,7 @@ class Result implements \ArrayAccess
 
 			$data['lastseen'] = (int) $data['lastseen'];
 			$data['lastseen_obj'] = $lastseen = new \DateTime('@' . $data['lastseen']);
-			$data['lastseen_obj'] = $lastseen->diff($now, true);
+			$data['lastseen_span'] = $lastseen->diff($now, true);
 		}
 		else
 		{
