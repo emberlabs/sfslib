@@ -278,12 +278,18 @@ class Instance implements TransmissionInstanceInterface
 	 */
 	public function send()
 	{
+		$sfs = \emberlabs\sfslib\Library::getInstance();
 		$injector = Injector::getInstance();
 		$transmitter = $injector->get('sfs.transmitter');
 
 		if(empty($this->username) || empty($this->email) || empty($this->ip))
 		{
 			throw new ReportException('Report must contain a username, an email, and an IP');
+		}
+
+		if(!$sfs->getKey())
+		{
+			throw new ReportException('An API key must be provided when reporting to the StopForumSpam API');
 		}
 
 		if(!empty($this->evidence))
