@@ -158,14 +158,20 @@ class Library
 	 * @param string $username - The username to report.
 	 * @param string $email - The email to report.
 	 * @param string $ip - The IP to report.
+	 * @param string $evidence - The evidence to report (optional).
 	 * @return ReportResponse|ReportError - The response received from the StopForumSpam API.
 	 */
-	public function report($username, $email, $ip)
+	public function report($username, $email, $ip, $evidence = '')
 	{
 		$report = ReportInstance::newInstance()
 			->setUsername($username)
 			->setEmail($email)
 			->setIP($ip);
+
+		if(!empty($evidence))
+		{
+			$report->setEvidence($evidence);
+		}
 
 		// This will NOT return the just-created ReportInstance, instead it will return a ReportError or a ReportResponse object.
 		return $report->send();
