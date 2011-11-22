@@ -47,3 +47,4 @@ Changes in 1.0.0-b2:
 Changes in 1.0.0-b3:
 
 * Fix bug with `Request\Response` and IP lookups
+* Fix wrong default value being used for evidence when reporting

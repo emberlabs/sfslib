@@ -59,7 +59,7 @@ class Instance implements TransmissionInstanceInterface
 	/**
 	 * @var string - Evidence for the report to submit to StopForumSpam.
 	 */
-	protected $evidence = 0;
+	protected $evidence = '';
 
 	/**
 	 * @var \emberlabs\sfslib\Transmission\Report\Response - The result object.
