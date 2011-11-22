@@ -169,7 +169,7 @@ class Response implements TransmissionResponseInterface
 			return NULL;
 		}
 
-		return strtolower($this->data['ip'][(string) $ip]);
+		return $this->data['ip'][(string) $ip];
 	}
 
 	/**

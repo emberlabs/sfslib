@@ -43,3 +43,7 @@ Changes in 1.0.0-b2:
 * Require an API key when reporting to the SFS API
 * Fix bug with lastseen object not being a DateTime object
 * Workaround for an API issue where API returns response with modified data being used as array indexes within the response
+
+Changes in 1.0.0-b3:
+
+* Fix bug with `Request\Response` and IP lookups
