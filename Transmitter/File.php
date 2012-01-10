@@ -20,7 +20,7 @@
 
 namespace emberlabs\sfslib\Transmitter;
 use \emberlabs\sfslib\Library as SFS;
-use \OpenFlame\Framework\Core;
+use \OpenFlame\Framework\Core\Core;
 
 /**
  * StopForumSpam integration library - Transmitter object

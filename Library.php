@@ -19,8 +19,8 @@
  */
 
 namespace emberlabs\sfslib;
-use \OpenFlame\Framework\Core;
-use \OpenFlame\Framework\Dependency\Injector;
+use \OpenFlame\Framework\Core\Core;
+use \OpenFlame\Framework\Core\DependencyInjector;
 use \emberlabs\sfslib\Transmission\Request\Instance as RequestInstance;
 use \emberlabs\sfslib\Transmission\Request\Response as RequestResponse;
 use \emberlabs\sfslib\Transmission\Request\Error as RequestError;
@@ -42,7 +42,7 @@ class Library
 	/**
 	 * @const string - The version of the library.
 	 */
-	const LIB_VERSION = '1.0.0-b2';
+	const LIB_VERSION = '1.0.0-rc1';
 
 	/**
 	 * @var \emberlabs\sfslib\Library - The singleton instance of this object.
@@ -88,7 +88,7 @@ class Library
 			'sfs.transmitter'			=> 'file',
 		);
 
-		$injector = Injector::getInstance();
+		$injector = DependencyInjector::getInstance();
 		$injector->setInjector('sfs.transmitter', function() use($injector) {
 			return $injector->get('sfs.transmitter.' . Core::getConfig('sfs.transmitter'));
 		});
